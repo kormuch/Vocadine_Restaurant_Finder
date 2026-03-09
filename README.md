@@ -1,2 +1,2 @@
-# Vocadine_Restaurant_Finder
-VocaDine, your restaurant finder assistant
+# Vocadine Restaurant Finder
+VocaDine, your restaurant finder voice assistant
