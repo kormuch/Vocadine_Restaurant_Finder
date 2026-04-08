@@ -1,0 +1,6 @@
+SpeechRecognition==3.10.4
+pyttsx3==2.90
+requests==2.31.0
+scikit-learn==1.4.0
+pyaudio==0.2.14
+python-dotenv==1.0.0
