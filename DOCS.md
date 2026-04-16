@@ -595,3 +595,22 @@ Installieren: `pip install -r requirements.txt`
 
 Auf Windows kann `pyaudio` Probleme machen. Falls nötig:
 `pip install pipwin && pipwin install pyaudio`
+
+---
+
+## Commercial Limitations & IP Landscape
+
+During prior voice app development, the author identified **EP2639792A1** (European Patent, priority 2011) — a patent covering location-based action dispatch in conversational voice interfaces. The core claim describes the "text adventure" model for voice: a stateful graph where the user's current location determines which actions and intents are available at that node.
+
+**Implication:** Any commercial voice assistant that implements `location → available_actions(location)` as a stateful navigation model risks infringing this patent.
+
+**VocaDine's architectural response:**
+
+VocaDine deliberately uses a **single-intent, stateless search model**:
+- The user states all slots in one or few utterances (location, cuisine, diet, budget, group_size)
+- There is no location → action graph; the system does not change available intents based on a current "place" in a conversation tree
+- Slot filling is implicit and parallel, not sequential and location-gated
+
+This is partly a practical scope decision for a prototype — and partly a conscious architectural choice that keeps VocaDine outside the patent's claim space if ever extended commercially.
+
+**Patent reference:** EP2639792A1 — *"Method and system for providing location-based voice-controlled information"*, espacenet.com/patent/search/family/047997307/publication/EP2639792A1
