@@ -26,13 +26,32 @@ GERMAN_CITIES.update(ENGLISH_ALIASES)
 GERMAN_CITIES = {city.lower(): city for city in GERMAN_CITIES_LIST}
 # Manuelle Korrekturen für häufige Hörfehler (Phonetic Mapping)
 PHONETIC_ALIASES = {
+    # English exonyms (tourists use these)
     "munich": "München",
     "cologne": "Köln",
+    "nuremberg": "Nürnberg",
     "mayence": "Mainz",
-    "gerlach": "Haigerloch",   # Dein spezifischer Fehler-Fix
-    "girl": "Haigerloch",      # Dein spezifischer Fehler-Fix
+    "hanover": "Hannover",
+    "brunswick": "Braunschweig",
+    # Short forms missing from official list
+    "hamburg": "Hamburg",
+    "frankfurt": "Frankfurt am Main",
+    "dusseldorf": "Düsseldorf",
+    "bremen": "Bremen",
+    # STT phonetic aliases
+    "gerlach": "Haigerloch",
+    "girl": "Haigerloch",
     "higher lock": "Haigerloch",
     "bear lough": "Balingen",
-    "bärlauch": "Balingen"
+    "bärlauch": "Balingen",
+    "tubing": "Tübingen",
+    "tubing in": "Tübingen",
+    "tubingen": "Tübingen",
+    "tübingen": "Tübingen",
+    # Horb am Neckar
+    "hope america": "Horb am Neckar",
+    "hope am neckar": "Horb am Neckar",
+    "horb": "Horb am Neckar",
+    "horb am neckar": "Horb am Neckar",
 }
 GERMAN_CITIES.update({k.lower(): v for k, v in PHONETIC_ALIASES.items()})
