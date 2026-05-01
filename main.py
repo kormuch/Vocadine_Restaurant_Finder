@@ -11,6 +11,8 @@ import asyncio
 import nltk
 import tempfile
 import requests
+import logging
+from datetime import datetime
 import speech_recognition as sr
 import edge_tts
 import pygame
@@ -23,6 +25,23 @@ from sklearn.metrics.pairwise import cosine_similarity
 # ─────────────────────────────────────────────
 load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_PLACES_KEY")
+
+# ─────────────────────────────────────────────
+# SESSION LOGGING
+# ─────────────────────────────────────────────
+_session_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+_sessions_dir = os.path.join(os.path.dirname(__file__), "sessions")
+os.makedirs(_sessions_dir, exist_ok=True)
+_log_path = os.path.join(_sessions_dir, f"session_{_session_id}.log")
+logging.basicConfig(
+    filename=_log_path,
+    level=logging.INFO,
+    format="%(asctime)s | %(message)s",
+    datefmt="%H:%M:%S",
+)
+def _log(msg: str):
+    logging.info(msg)
+    print(msg)
 
 if not GOOGLE_API_KEY:
     print("❌ ERROR: GOOGLE_PLACES_KEY not found in .env file!")
@@ -58,6 +77,8 @@ SLOT_FRAGMENTS = {
     "group_size":       "how many people",
     "occasion":         "what is the occasion",
     "special_features": "any special requirements like outdoor seating",
+    "datetime":         "when would you like to eat",
+    "distance":         "how far are you willing to travel — walking distance or anywhere in the city",
 }
 
 HIGH_IMPACT_SLOTS = {"location", "cuisine", "diet"}
@@ -67,7 +88,7 @@ CRITICAL_SLOTS = ["location", "cuisine", "diet", "budget"]
 # Slots asked only if user hasn't volunteered them
 OPTIONAL_SLOTS = ["group_size", "occasion", "special_features"]
 # Slots auto-filled with "any" — not worth asking explicitly
-AUTO_SKIP_SLOTS = {"past_experience", "datetime", "distance"}
+AUTO_SKIP_SLOTS = set()  # all slots are now asked explicitly or in pairs
 
 # ─────────────────────────────────────────────
 # TTS ENGINE (edge-tts — Microsoft Neural Voice)
@@ -79,7 +100,7 @@ class TTSEngine:
 
     def speak(self, text: str):
         import threading
-        print(f"\n[VocaDine] {text}")
+        _log(f"\n[VocaDine] {text}")
         t = threading.Thread(target=lambda: asyncio.run(self._speak_async(text)))
         t.start()
         t.join()
@@ -106,12 +127,12 @@ class STTEngine:
 
     def listen(self, language: str = "en-US") -> str | None:
         with sr.Microphone() as source:
-            print(f"[LISTENING] Please speak... ({language})")
+            _log(f"[LISTENING] Please speak... ({language})")
             self.recognizer.adjust_for_ambient_noise(source, duration=0.5)
             try:
                 audio = self.recognizer.listen(source, timeout=7, phrase_time_limit=15)
                 text = self.recognizer.recognize_google(audio, language=language)
-                print(f"[USER] {text}")
+                _log(f"[USER] {text}")
                 return text.lower().strip()
             except:
                 return None
@@ -150,7 +171,7 @@ class GooglePlacesClient:
             headers = {
                 "Content-Type": "application/json",
                 "X-Goog-Api-Key": self.api_key,
-                "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.rating,places.priceLevel,places.types"
+                "X-Goog-FieldMask": "places.displayName,places.formattedAddress,places.rating,places.priceLevel,places.types,places.editorialSummary,places.reviews,places.outdoorSeating,places.goodForGroups,places.priceRange"
             }
             body = {
                 "textQuery": self._build_query(slots),
@@ -175,12 +196,136 @@ class GooglePlacesClient:
 # ─────────────────────────────────────────────
 # NLU & ML RANKING
 # ─────────────────────────────────────────────
+
+# spaCy entity label → dialog slot name
+_SPACY_LABEL_TO_SLOT = {
+    "LOCATION":   "location",
+    "CUISINE":    "cuisine",
+    "DIET":       "diet",
+    "BUDGET":     "budget",
+    "GROUP_SIZE": "group_size",
+}
+
+# Normalise raw spaCy entity text → canonical slot value
+def _normalise_spacy_value(slot: str, raw: str) -> str | None:
+    t = raw.lower().strip()
+
+    if slot == "location":
+        # Try city whitelist first; fall back to title-cased raw text
+        for key, canonical in GERMAN_CITIES.items():
+            if re.search(r'\b' + re.escape(key) + r'\b', t):
+                return canonical
+        return raw.strip().title()
+
+    if slot == "cuisine":
+        return raw.strip().title()
+
+    if slot == "diet":
+        norm = {
+            "vegan": "vegan", "plant-based": "vegan", "plant based": "vegan",
+            "vegetarian": "vegetarian", "veggie": "vegetarian",
+            "gluten-free": "gluten-free", "gluten free": "gluten-free",
+            "halal": "halal", "kosher": "kosher",
+            "pescatarian": "pescatarian", "dairy-free": "dairy-free",
+            "dairy free": "dairy-free", "lactose-free": "dairy-free",
+            "nut-free": "nut-free",
+        }
+        for k, v in norm.items():
+            if k in t:
+                return v
+        return t  # unknown diet restriction — keep as-is
+
+    if slot == "budget":
+        fine   = ["fine dining", "upscale", "luxury", "fancy", "upmarket", "splash out"]
+        cheap  = ["cheap", "inexpensive", "affordable", "budget", "tight", "pennies",
+                  "budget-friendly", "low budget"]
+        mod    = ["moderate", "mid-range", "mid range", "reasonable", "average",
+                  "not too expensive", "nothing fancy", "somewhere in between", "normal"]
+        for kw in fine:
+            if kw in t: return "fine dining"
+        for kw in cheap:
+            if kw in t: return "cheap"
+        for kw in mod:
+            if kw in t: return "moderate"
+        return None  # unrecognised budget phrase — skip
+
+    if slot == "group_size":
+        word_nums = {"one": "1", "two": "2", "three": "3", "four": "4", "five": "5",
+                     "six": "6", "seven": "7", "eight": "8", "nine": "9", "ten": "10",
+                     "solo": "1", "just me": "1", "alone": "1",
+                     "a couple": "2", "pair": "2", "the two of us": "2",
+                     "family": "4", "large group": "6", "small group": "3"}
+        for kw, num in word_nums.items():
+            if kw in t: return num
+        m = re.search(r'\b(\d+)\b', t)
+        if m: return m.group(1)
+        return None
+
+    return None
+
+
 class NLU:
+    """
+    Named Entity Recognition for VocaDine slot filling.
+
+    Primary:  spaCy NER model trained on 600 domain utterances
+              (models/vocadine_nlu/ — produced by train_nlu.py).
+    Fallback: Rule-based extraction (city whitelist + keyword maps)
+              used when the model directory is missing or on import error.
+    """
+
+    _MODEL_PATH = "models/vocadine_nlu"
+
+    def __init__(self):
+        self.nlp = None
+        try:
+            import spacy
+            from pathlib import Path
+            model_path = Path(__file__).parent / self._MODEL_PATH
+            if model_path.exists():
+                self.nlp = spacy.load(str(model_path))
+                print(f"[NLU] spaCy model loaded from {model_path}")
+            else:
+                print(f"[NLU] spaCy model not found at {model_path} — rule-based fallback only.")
+                print(f"      Run 'python train_nlu.py' to build the model.")
+        except ImportError:
+            print("[NLU] spaCy not installed — rule-based fallback only.")
+        except Exception as e:
+            print(f"[NLU] Could not load spaCy model: {e} — rule-based fallback only.")
+
+    def extract_all_spacy(self, text: str) -> dict:
+        """
+        Run spaCy NER over text and return {slot_name: value} for all
+        recognised entities. Returns empty dict if model not available.
+        """
+        if self.nlp is None:
+            return {}
+        doc = self.nlp(text)
+        result = {}
+        for ent in doc.ents:
+            slot = _SPACY_LABEL_TO_SLOT.get(ent.label_)
+            if slot and slot not in result:
+                value = _normalise_spacy_value(slot, ent.text)
+                if value:
+                    result[slot] = value
+        return result
+
     def extract(self, slot_name: str, text: str) -> str | None:
-        text = text.lower().strip()
+        """
+        Single-slot extraction used as final fallback in _ask_slot().
+        Tries spaCy first, then rule-based city whitelist for location.
+        """
+        t = text.lower().strip()
+
+        # spaCy pass
+        spacy_hits = self.extract_all_spacy(t)
+        if slot_name in spacy_hits:
+            return spacy_hits[slot_name]
+
+        # Rule-based fallback for location
         if slot_name == "location":
             for key, canonical in GERMAN_CITIES.items():
-                if re.search(r'\b' + re.escape(key) + r'\b', text):
+                if re.search(r'\b' + re.escape(key) + r'\b', t):
                     return canonical
         return None
 
@@ -189,13 +334,44 @@ class RecommendationEngine:
         if not businesses: return []
         
         def build_features(biz: dict) -> str:
-            types = " ".join(biz.get("types", []))
             name = biz.get("name", "")
-            return f"{name} {types}".lower()
+            types = " ".join(biz.get("types", []))
+            summary = biz.get("editorialSummary", {}).get("text", "")
+            reviews = " ".join(
+                r.get("text", {}).get("text", "")
+                for r in biz.get("reviews", [])[:3]
+            )
+            # Inject structured attributes as text tokens so TF-IDF can match them
+            attrs = []
+            if biz.get("outdoorSeating"): attrs.append("outdoor seating terrace")
+            if biz.get("goodForGroups"): attrs.append("good for groups large party")
+            return f"{name} {types} {summary} {reviews} {' '.join(attrs)}".lower()
 
-        user_pref = f"{slots.get('cuisine')} {slots.get('diet')} {slots.get('occasion')}".lower()
+        def budget_bonus(biz: dict, budget_slot: str) -> float:
+            """+0.1 if priceRange matches the user's budget slot."""
+            price_range = biz.get("priceRange", {})
+            end_price = float(price_range.get("endPrice", {}).get("units", 0) or 0)
+            if end_price == 0:
+                return 0.0
+            if budget_slot == "cheap" and end_price <= 15:       return 0.1
+            if budget_slot == "moderate" and 15 < end_price <= 35: return 0.1
+            if budget_slot in ("fine dining", "expensive") and end_price > 35: return 0.1
+            return 0.0
+
+        def attribute_bonus(biz: dict) -> float:
+            """Small bonuses for structured attribute matches with user slots."""
+            bonus = 0.0
+            special = (slots.get("special_features") or "").lower()
+            if "outdoor" in special and biz.get("outdoorSeating"):
+                bonus += 0.1
+            group = slots.get("group_size")
+            if group and str(group).isdigit() and int(group) >= 4 and biz.get("goodForGroups"):
+                bonus += 0.1
+            return bonus
+
+        user_pref = f"{slots.get('cuisine')} {slots.get('diet')} {slots.get('occasion')} {slots.get('past_experience', '')}".lower()
         biz_features = [build_features(b) for b in businesses]
-        
+
         vectorizer = TfidfVectorizer(stop_words='english')
         try:
             tfidf = vectorizer.fit_transform(biz_features + [user_pref])
@@ -205,7 +381,12 @@ class RecommendationEngine:
         ranked = []
         for i, biz in enumerate(businesses):
             rating = biz.get("rating", 0)
-            combined = (scores[i] * 0.4) + ((rating / 5.0) * 0.6) # Slight bias towards ratings for tourists
+            combined = (
+                (scores[i] * 0.4)
+                + ((rating / 5.0) * 0.6)
+                + budget_bonus(biz, slots.get("budget", ""))
+                + attribute_bonus(biz)
+            )
             ranked.append((combined, biz))
 
         ranked.sort(key=lambda x: x[0], reverse=True)
@@ -274,7 +455,22 @@ class DialogStateManager:
         Returns a list of human-readable confirmation strings for TTS feedback."""
         confirmed = []
 
-        # Location — use word-boundary matching to avoid "burg" matching "hamburg"
+        # spaCy pass — fill LOCATION / CUISINE / DIET / BUDGET / GROUP_SIZE if model available
+        spacy_hits = self.nlu.extract_all_spacy(transcript)
+        for slot, value in spacy_hits.items():
+            if slot in self.slots and not self.slots.get(slot):
+                self.slots[slot] = value
+                label_map = {
+                    "location":   f"{value} as your location",
+                    "cuisine":    f"{value} cuisine",
+                    "diet":       f"{value} as dietary preference",
+                    "budget":     f"{value} budget",
+                    "group_size": f"a group of {value}",
+                }
+                hint = label_map.get(slot, f"{value}")
+                confirmed.append(hint)
+
+        # Location — fallback: word-boundary whitelist if spaCy missed it
         if not self.slots.get("location"):
             for key, canonical in GERMAN_CITIES.items():
                 if re.search(r'\b' + re.escape(key) + r'\b', transcript):
@@ -282,7 +478,7 @@ class DialogStateManager:
                     confirmed.append(f"{canonical} as your location")
                     break
 
-        # Cuisine
+        # Cuisine — fallback keyword list
         cuisines = ["italian", "turkish", "asian", "german food", "traditional german",
                     "french", "indian", "japanese", "chinese", "greek", "mexican",
                     "thai", "american", "burger", "burgers", "pizza", "sushi",
@@ -294,7 +490,7 @@ class DialogStateManager:
                     confirmed.append(f"{cuisine.title()} cuisine")
                     break
 
-        # Diet
+        # Diet — fallback keyword list
         diets = ["vegan", "vegetarian", "gluten-free", "halal", "kosher"]
         if not self.slots.get("diet"):
             for diet in diets:
@@ -308,7 +504,7 @@ class DialogStateManager:
                 elif re.search(r"^no\b", transcript):
                     self.slots["diet"] = "none"
 
-        # Budget
+        # Budget — fallback keyword map
         budget_map = [
             ("fine dining", "fine dining"), ("expensive", "fine dining"), ("fancy", "fine dining"),
             ("upscale", "fine dining"), ("high end", "fine dining"),
@@ -341,6 +537,31 @@ class DialogStateManager:
                     self.slots["occasion"] = label
                     confirmed.append(f"{label} as occasion")
                     break
+
+        # Datetime
+        if not self.slots.get("datetime"):
+            datetime_map = [
+                ("right now", "right now"), ("now", "right now"),
+                ("tonight", "tonight"), ("this evening", "tonight"),
+                ("today", "today"), ("this afternoon", "this afternoon"),
+                ("tomorrow", "tomorrow"), ("tomorrow evening", "tomorrow evening"),
+                ("for lunch", "lunch"), ("at lunch", "lunch"),
+                ("for dinner", "dinner"), ("at dinner", "dinner"),
+                ("this weekend", "this weekend"), ("saturday", "saturday"), ("sunday", "sunday"),
+            ]
+            for keyword, label in datetime_map:
+                if keyword in transcript:
+                    self.slots["datetime"] = label
+                    confirmed.append(f"{label}")
+                    break
+            # Fallback: store raw text if time expression not matched
+            if not self.slots.get("datetime") and re.search(
+                r'\b(at|around|by|before|after)\s+\d', transcript
+            ):
+                match = re.search(r'\b((?:at|around|by|before|after)\s+[\w\s:]+(?:am|pm)?)', transcript)
+                if match:
+                    self.slots["datetime"] = match.group(1).strip()
+                    confirmed.append(match.group(1).strip())
 
         # Distance
         distance_map = [
@@ -401,6 +622,45 @@ class DialogStateManager:
 
         return confirmed
 
+    def _infer_diet_from_past_experience(self):
+        """
+        Infer diet slot from past_experience free-text if diet is still unknown.
+        - Meat keyword + negation ("don't like meat") → diet = vegetarian
+          KNOWN EDGE CASE: negation detection is shallow (no deep parsing).
+          "They served meat and I don't like meat" may not always parse correctly
+          if the negation is separated from the keyword by a long clause.
+        - Meat keyword without negation → diet = none (no restrictions)
+        - No meat keyword → no inference, diet question will be asked normally.
+        """
+        if self.slots.get("diet") is not None:
+            return
+        past = self.slots.get("past_experience", "") or ""
+        past = past.lower()
+
+        MEAT_KEYWORDS = [
+            "meat", "chicken", "beef", "pork", "steak", "meatball",
+            "burger", "sausage", "fish", "seafood", "bacon", "lamb", "duck"
+        ]
+        NEGATION_PATTERNS = [
+            r"don'?t (like|eat|want|enjoy)",
+            r"do not (like|eat|want|enjoy)",
+            r"hate",
+            r"can'?t eat",
+            r"avoid",
+            r"not a (fan|big fan)",
+            r"i'?m not into",
+        ]
+
+        meat_found = any(kw in past for kw in MEAT_KEYWORDS)
+        negation_found = any(re.search(p, past) for p in NEGATION_PATTERNS)
+
+        if meat_found and negation_found:
+            # User dislikes meat → likely vegetarian, but we can't be certain → ask
+            # This is a known limitation: edge case documented in Error Analysis
+            pass  # do not infer, let the diet question run normally
+        elif meat_found:
+            self.slots["diet"] = "none"
+
     def _detect_ambiguity(self, transcript: str) -> tuple | None:
         """Detect if transcript contains multiple competing values for a single slot.
         Returns (slot_name, [option_a, option_b]) or None."""
@@ -449,6 +709,11 @@ class DialogStateManager:
                 self._resolve_ambiguity(amb_slot, options)
             if self.slots[slot] is None:
                 self.slots[slot] = self.nlu.extract(slot, transcript)
+            # Free-form slots: store raw transcript, confirm receipt
+            if slot == "past_experience" and self.slots[slot] is None and transcript:
+                self.slots[slot] = transcript
+                if not confirmed:
+                    self.tts.speak("Got it, I'll keep that in mind.")
             # Indifference fallback: "don't care / doesn't matter / not important" → any
             if self.slots[slot] is None:
                 if re.search(r"\b(don'?t care|doesn'?t matter|not important|no preference|up to you|whatever|anything)\b", transcript):
@@ -521,17 +786,44 @@ class DialogStateManager:
         if all(self.slots[s] is not None for s in SLOTS):
             return self.slots
 
-        # Critical slots: ask individually (each is too important to bundle)
-        for slot in CRITICAL_SLOTS:
+        # Solo critical slots
+        for slot in ["location", "cuisine"]:
             if self.slots[slot] is None:
                 self._ask_slot(slot)
             if all(self.slots[s] is not None for s in SLOTS):
                 return self.slots
 
-        # Optional slots: bundle all remaining into one question
-        missing_optional = [s for s in OPTIONAL_SLOTS if self.slots[s] is None]
-        if missing_optional:
-            self._ask_bundled(missing_optional)
+        # past_experience — open-ended, asked alone after location/cuisine
+        if self.slots["past_experience"] is None:
+            self._ask_slot("past_experience")
+
+        # Infer diet from past_experience before asking (may skip the question entirely)
+        self._infer_diet_from_past_experience()
+
+        # Paired slots: diet + budget together
+        missing_diet_budget = [s for s in ["diet", "budget"] if self.slots[s] is None]
+        if missing_diet_budget:
+            self._ask_bundled(missing_diet_budget)
+        if all(self.slots[s] is not None for s in SLOTS):
+            return self.slots
+
+        # Paired slots: group_size + occasion together
+        missing_group_occasion = [s for s in ["group_size", "occasion"] if self.slots[s] is None]
+        if missing_group_occasion:
+            self._ask_bundled(missing_group_occasion)
+        if all(self.slots[s] is not None for s in SLOTS):
+            return self.slots
+
+        # Paired slots: datetime + distance together ("when and where")
+        missing_when_where = [s for s in ["datetime", "distance"] if self.slots[s] is None]
+        if missing_when_where:
+            self._ask_bundled(missing_when_where)
+        if all(self.slots[s] is not None for s in SLOTS):
+            return self.slots
+
+        # special_features alone
+        if self.slots["special_features"] is None:
+            self._ask_slot("special_features")
 
         # Auto-skip remaining slots
         for slot in SLOTS:
