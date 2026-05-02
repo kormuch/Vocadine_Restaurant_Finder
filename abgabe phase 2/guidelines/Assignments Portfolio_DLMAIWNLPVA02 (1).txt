@@ -1,0 +1,71 @@
+1. Project Task: Restaurant Booking Assistant
+You must develop a voice assistant that helps users book a restaurant based on personal preferences.
+
+Mandatory Inputs: Past bookings, dietary restrictions (vegan/veg), cuisine preference, time/day, and number of guests.
+
+Scale: Sufficient to handle 10 questions and 10 answers.
+
+Output: An individualized recommendation system (Content-based, Collaborative, or Hybrid filtering).
+
+Optional Features (Pick 1): 
+1. Contextual data (busy times, parking) via Twitter/Facebook APIs.
+2. Open data (menus, reviews) via Google Maps or Yelp.
+3. Sentiment analysis (e.g., via OpenAI Whisper) to adjust tone based on user stress/mood.
+
+2. Technical Submission Requirements (The 3 Phases)
+Phase 1: Conception
+Written Concept: 1 DIN A4 page (PDF) explaining the goals, target audience, and choice of tools/frameworks.
+
+Diagram: At least one architectural diagram (UML or Flowchart) showing component interaction and workflow.
+
+Recommended Tools: Draw.io, StarUML, Visio.
+
+Phase 2: Development & Reflection
+Presentation: A 10-slide PDF explaining the implementation procedure.
+
+Content: Must include visual elements, hyperlinks to frameworks, and performance metrics (Precision, Recall, F1 score).
+
+Implementation Steps: Setup frameworks, collect training data, train NLP models, and perform error analysis.
+
+Phase 3: Finalization
+Abstract: 2-page PDF "Making Of" (Arial 11pt, 1.5 line spacing).
+
+Final Product: PDF containing links to a GitHub repository.
+
+ZIP Folder: Must contain all project files (Skill files, Config, Dialog files) organized in subdirectories:
+
+01-Research-and-Development
+
+diagrams
+
+voice assistant
+
+04-Finished voice assistant (User documentation/script to run the bot).
+
+3. Mandatory Documentation Checklist
+In the final submission, you must include documents for:
+
+[ ] Functional & non-functional requirements.
+
+[ ] Design document with architectural overview.
+
+[ ] Data annotation guidelines (labeling process).
+
+[ ] Dataset description (voice samples, transcripts).
+
+[ ] Evaluation metrics table.
+
+[ ] Codebase access (GitHub link).
+
+4. Evaluation Weighting
+40% Quality of Implementation: Does it provide useful recommendations? How are the performance metrics?
+
+20% Methodology/Ideas: Appropriateness of tools (e.g., Mycroft, Snips, TensorFlow, PyTorch).
+
+20% Creativity/Correctness: Innovation in solving challenges.
+
+10% Problem Solving: Clarity of the problem definition.
+
+10% Formal Requirements: Adherence to file naming and formatting.
+
+Naming Convention: Name-FirstName_MatrNo_Voice Assistants_PX_S

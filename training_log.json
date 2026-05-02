@@ -1,0 +1,2082 @@
+[
+  {
+    "epoch": 1,
+    "loss": 1140.2206,
+    "val_macro_f1": 0.3111,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 0.878,
+        "recall": 0.9474,
+        "f1": 0.9114,
+        "tp": 36,
+        "fp": 5,
+        "fn": 2
+      },
+      "CUISINE": {
+        "precision": 0.5053,
+        "recall": 0.8889,
+        "f1": 0.6443,
+        "tp": 48,
+        "fp": 47,
+        "fn": 6
+      },
+      "DIET": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 22
+      },
+      "BUDGET": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 22
+      },
+      "GROUP_SIZE": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 31
+      },
+      "macro": {
+        "precision": 0.2767,
+        "recall": 0.3673,
+        "f1": 0.3111
+      }
+    }
+  },
+  {
+    "epoch": 2,
+    "loss": 553.7534,
+    "val_macro_f1": 0.6777,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 0.9474,
+        "recall": 0.9474,
+        "f1": 0.9474,
+        "tp": 36,
+        "fp": 2,
+        "fn": 2
+      },
+      "CUISINE": {
+        "precision": 0.9259,
+        "recall": 0.9259,
+        "f1": 0.9259,
+        "tp": 50,
+        "fp": 4,
+        "fn": 4
+      },
+      "DIET": {
+        "precision": 0.6818,
+        "recall": 0.6818,
+        "f1": 0.6818,
+        "tp": 15,
+        "fp": 7,
+        "fn": 7
+      },
+      "BUDGET": {
+        "precision": 0.7059,
+        "recall": 0.5455,
+        "f1": 0.6154,
+        "tp": 12,
+        "fp": 5,
+        "fn": 10
+      },
+      "GROUP_SIZE": {
+        "precision": 0.25,
+        "recall": 0.1935,
+        "f1": 0.2182,
+        "tp": 6,
+        "fp": 18,
+        "fn": 25
+      },
+      "macro": {
+        "precision": 0.7022,
+        "recall": 0.6588,
+        "f1": 0.6777
+      }
+    }
+  },
+  {
+    "epoch": 3,
+    "loss": 426.0347,
+    "val_macro_f1": 0.8109,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 0.9487,
+        "recall": 0.9737,
+        "f1": 0.961,
+        "tp": 37,
+        "fp": 2,
+        "fn": 1
+      },
+      "CUISINE": {
+        "precision": 0.8966,
+        "recall": 0.963,
+        "f1": 0.9286,
+        "tp": 52,
+        "fp": 6,
+        "fn": 2
+      },
+      "DIET": {
+        "precision": 0.8947,
+        "recall": 0.7727,
+        "f1": 0.8293,
+        "tp": 17,
+        "fp": 2,
+        "fn": 5
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.6818,
+        "f1": 0.8108,
+        "tp": 15,
+        "fp": 0,
+        "fn": 7
+      },
+      "GROUP_SIZE": {
+        "precision": 0.5333,
+        "recall": 0.5161,
+        "f1": 0.5246,
+        "tp": 16,
+        "fp": 14,
+        "fn": 15
+      },
+      "macro": {
+        "precision": 0.8547,
+        "recall": 0.7815,
+        "f1": 0.8109
+      }
+    }
+  },
+  {
+    "epoch": 4,
+    "loss": 289.9785,
+    "val_macro_f1": 0.9137,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9811,
+        "recall": 0.963,
+        "f1": 0.972,
+        "tp": 52,
+        "fp": 1,
+        "fn": 2
+      },
+      "DIET": {
+        "precision": 0.88,
+        "recall": 1.0,
+        "f1": 0.9362,
+        "tp": 22,
+        "fp": 3,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.8636,
+        "f1": 0.9268,
+        "tp": 19,
+        "fp": 0,
+        "fn": 3
+      },
+      "GROUP_SIZE": {
+        "precision": 0.7586,
+        "recall": 0.7097,
+        "f1": 0.7333,
+        "tp": 22,
+        "fp": 7,
+        "fn": 9
+      },
+      "macro": {
+        "precision": 0.924,
+        "recall": 0.9073,
+        "f1": 0.9137
+      }
+    }
+  },
+  {
+    "epoch": 5,
+    "loss": 179.7139,
+    "val_macro_f1": 0.8996,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 0.95,
+        "recall": 1.0,
+        "f1": 0.9744,
+        "tp": 38,
+        "fp": 2,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.963,
+        "recall": 0.963,
+        "f1": 0.963,
+        "tp": 52,
+        "fp": 2,
+        "fn": 2
+      },
+      "DIET": {
+        "precision": 0.9565,
+        "recall": 1.0,
+        "f1": 0.9778,
+        "tp": 22,
+        "fp": 1,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.8636,
+        "f1": 0.9268,
+        "tp": 19,
+        "fp": 0,
+        "fn": 3
+      },
+      "GROUP_SIZE": {
+        "precision": 0.6364,
+        "recall": 0.6774,
+        "f1": 0.6562,
+        "tp": 21,
+        "fp": 12,
+        "fn": 10
+      },
+      "macro": {
+        "precision": 0.9012,
+        "recall": 0.9008,
+        "f1": 0.8996
+      }
+    }
+  },
+  {
+    "epoch": 6,
+    "loss": 149.6856,
+    "val_macro_f1": 0.9276,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 0.9737,
+        "f1": 0.9867,
+        "tp": 37,
+        "fp": 0,
+        "fn": 1
+      },
+      "CUISINE": {
+        "precision": 0.9455,
+        "recall": 0.963,
+        "f1": 0.9541,
+        "tp": 52,
+        "fp": 3,
+        "fn": 2
+      },
+      "DIET": {
+        "precision": 0.9565,
+        "recall": 1.0,
+        "f1": 0.9778,
+        "tp": 22,
+        "fp": 1,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.8182,
+        "f1": 0.9,
+        "tp": 18,
+        "fp": 0,
+        "fn": 4
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8333,
+        "recall": 0.8065,
+        "f1": 0.8197,
+        "tp": 25,
+        "fp": 5,
+        "fn": 6
+      },
+      "macro": {
+        "precision": 0.9471,
+        "recall": 0.9123,
+        "f1": 0.9276
+      }
+    }
+  },
+  {
+    "epoch": 7,
+    "loss": 144.8792,
+    "val_macro_f1": 0.9425,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9818,
+        "recall": 1.0,
+        "f1": 0.9908,
+        "tp": 54,
+        "fp": 1,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 0.9565,
+        "recall": 1.0,
+        "f1": 0.9778,
+        "tp": 22,
+        "fp": 1,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.8182,
+        "f1": 0.9,
+        "tp": 18,
+        "fp": 0,
+        "fn": 4
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8182,
+        "recall": 0.871,
+        "f1": 0.8438,
+        "tp": 27,
+        "fp": 6,
+        "fn": 4
+      },
+      "macro": {
+        "precision": 0.9513,
+        "recall": 0.9378,
+        "f1": 0.9425
+      }
+    }
+  },
+  {
+    "epoch": 8,
+    "loss": 108.6532,
+    "val_macro_f1": 0.9136,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 0.95,
+        "recall": 1.0,
+        "f1": 0.9744,
+        "tp": 38,
+        "fp": 2,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9811,
+        "recall": 0.963,
+        "f1": 0.972,
+        "tp": 52,
+        "fp": 1,
+        "fn": 2
+      },
+      "DIET": {
+        "precision": 0.9565,
+        "recall": 1.0,
+        "f1": 0.9778,
+        "tp": 22,
+        "fp": 1,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 0.9444,
+        "recall": 0.7727,
+        "f1": 0.85,
+        "tp": 17,
+        "fp": 1,
+        "fn": 5
+      },
+      "GROUP_SIZE": {
+        "precision": 0.7812,
+        "recall": 0.8065,
+        "f1": 0.7937,
+        "tp": 25,
+        "fp": 7,
+        "fn": 6
+      },
+      "macro": {
+        "precision": 0.9227,
+        "recall": 0.9084,
+        "f1": 0.9136
+      }
+    }
+  },
+  {
+    "epoch": 9,
+    "loss": 107.7469,
+    "val_macro_f1": 0.9209,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.931,
+        "recall": 1.0,
+        "f1": 0.9643,
+        "tp": 54,
+        "fp": 4,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 0.9545,
+        "recall": 0.9545,
+        "f1": 0.9545,
+        "tp": 21,
+        "fp": 1,
+        "fn": 1
+      },
+      "GROUP_SIZE": {
+        "precision": 0.6154,
+        "recall": 0.7742,
+        "f1": 0.6857,
+        "tp": 24,
+        "fp": 15,
+        "fn": 7
+      },
+      "macro": {
+        "precision": 0.9002,
+        "recall": 0.9457,
+        "f1": 0.9209
+      }
+    }
+  },
+  {
+    "epoch": 10,
+    "loss": 101.7292,
+    "val_macro_f1": 0.9516,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 0.9737,
+        "f1": 0.9867,
+        "tp": 37,
+        "fp": 0,
+        "fn": 1
+      },
+      "CUISINE": {
+        "precision": 0.9464,
+        "recall": 0.9815,
+        "f1": 0.9636,
+        "tp": 53,
+        "fp": 3,
+        "fn": 1
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.9545,
+        "f1": 0.9767,
+        "tp": 21,
+        "fp": 0,
+        "fn": 1
+      },
+      "GROUP_SIZE": {
+        "precision": 0.7941,
+        "recall": 0.871,
+        "f1": 0.8308,
+        "tp": 27,
+        "fp": 7,
+        "fn": 4
+      },
+      "macro": {
+        "precision": 0.9481,
+        "recall": 0.9561,
+        "f1": 0.9516
+      }
+    }
+  },
+  {
+    "epoch": 11,
+    "loss": 77.5364,
+    "val_macro_f1": 0.9327,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 0.9744,
+        "recall": 1.0,
+        "f1": 0.987,
+        "tp": 38,
+        "fp": 1,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9298,
+        "recall": 0.9815,
+        "f1": 0.955,
+        "tp": 53,
+        "fp": 4,
+        "fn": 1
+      },
+      "DIET": {
+        "precision": 0.9565,
+        "recall": 1.0,
+        "f1": 0.9778,
+        "tp": 22,
+        "fp": 1,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.8182,
+        "f1": 0.9,
+        "tp": 18,
+        "fp": 0,
+        "fn": 4
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8182,
+        "recall": 0.871,
+        "f1": 0.8438,
+        "tp": 27,
+        "fp": 6,
+        "fn": 4
+      },
+      "macro": {
+        "precision": 0.9358,
+        "recall": 0.9341,
+        "f1": 0.9327
+      }
+    }
+  },
+  {
+    "epoch": 12,
+    "loss": 79.0793,
+    "val_macro_f1": 0.9226,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9636,
+        "recall": 0.9815,
+        "f1": 0.9725,
+        "tp": 53,
+        "fp": 2,
+        "fn": 1
+      },
+      "DIET": {
+        "precision": 0.9565,
+        "recall": 1.0,
+        "f1": 0.9778,
+        "tp": 22,
+        "fp": 1,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 0.9444,
+        "recall": 0.7727,
+        "f1": 0.85,
+        "tp": 17,
+        "fp": 1,
+        "fn": 5
+      },
+      "GROUP_SIZE": {
+        "precision": 0.7879,
+        "recall": 0.8387,
+        "f1": 0.8125,
+        "tp": 26,
+        "fp": 7,
+        "fn": 5
+      },
+      "macro": {
+        "precision": 0.9305,
+        "recall": 0.9186,
+        "f1": 0.9226
+      }
+    }
+  },
+  {
+    "epoch": 13,
+    "loss": 59.972,
+    "val_macro_f1": 0.9435,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9818,
+        "recall": 1.0,
+        "f1": 0.9908,
+        "tp": 54,
+        "fp": 1,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 0.9474,
+        "recall": 0.8182,
+        "f1": 0.878,
+        "tp": 18,
+        "fp": 1,
+        "fn": 4
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8,
+        "recall": 0.9032,
+        "f1": 0.8485,
+        "tp": 28,
+        "fp": 7,
+        "fn": 3
+      },
+      "macro": {
+        "precision": 0.9458,
+        "recall": 0.9443,
+        "f1": 0.9435
+      }
+    }
+  },
+  {
+    "epoch": 14,
+    "loss": 59.2664,
+    "val_macro_f1": 0.9502,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9643,
+        "recall": 1.0,
+        "f1": 0.9818,
+        "tp": 54,
+        "fp": 2,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "GROUP_SIZE": {
+        "precision": 0.7353,
+        "recall": 0.8065,
+        "f1": 0.7692,
+        "tp": 25,
+        "fp": 9,
+        "fn": 6
+      },
+      "macro": {
+        "precision": 0.9399,
+        "recall": 0.9613,
+        "f1": 0.9502
+      }
+    }
+  },
+  {
+    "epoch": 15,
+    "loss": 52.1017,
+    "val_macro_f1": 0.9641,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9818,
+        "recall": 1.0,
+        "f1": 0.9908,
+        "tp": 54,
+        "fp": 1,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 0.9565,
+        "recall": 1.0,
+        "f1": 0.9778,
+        "tp": 22,
+        "fp": 1,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.9545,
+        "f1": 0.9767,
+        "tp": 21,
+        "fp": 0,
+        "fn": 1
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8485,
+        "recall": 0.9032,
+        "f1": 0.875,
+        "tp": 28,
+        "fp": 5,
+        "fn": 3
+      },
+      "macro": {
+        "precision": 0.9574,
+        "recall": 0.9716,
+        "f1": 0.9641
+      }
+    }
+  },
+  {
+    "epoch": 16,
+    "loss": 80.2496,
+    "val_macro_f1": 0.9526,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9298,
+        "recall": 0.9815,
+        "f1": 0.955,
+        "tp": 53,
+        "fp": 4,
+        "fn": 1
+      },
+      "DIET": {
+        "precision": 0.9565,
+        "recall": 1.0,
+        "f1": 0.9778,
+        "tp": 22,
+        "fp": 1,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 0.9565,
+        "recall": 1.0,
+        "f1": 0.9778,
+        "tp": 22,
+        "fp": 1,
+        "fn": 0
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8667,
+        "recall": 0.8387,
+        "f1": 0.8525,
+        "tp": 26,
+        "fp": 4,
+        "fn": 5
+      },
+      "macro": {
+        "precision": 0.9419,
+        "recall": 0.964,
+        "f1": 0.9526
+      }
+    }
+  },
+  {
+    "epoch": 17,
+    "loss": 54.2332,
+    "val_macro_f1": 0.9433,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9464,
+        "recall": 0.9815,
+        "f1": 0.9636,
+        "tp": 53,
+        "fp": 3,
+        "fn": 1
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 0.9091,
+        "recall": 0.9091,
+        "f1": 0.9091,
+        "tp": 20,
+        "fp": 2,
+        "fn": 2
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8182,
+        "recall": 0.871,
+        "f1": 0.8438,
+        "tp": 27,
+        "fp": 6,
+        "fn": 4
+      },
+      "macro": {
+        "precision": 0.9347,
+        "recall": 0.9523,
+        "f1": 0.9433
+      }
+    }
+  },
+  {
+    "epoch": 18,
+    "loss": 59.4512,
+    "val_macro_f1": 0.9561,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9474,
+        "recall": 1.0,
+        "f1": 0.973,
+        "tp": 54,
+        "fp": 3,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 0.9545,
+        "recall": 0.9545,
+        "f1": 0.9545,
+        "tp": 21,
+        "fp": 1,
+        "fn": 1
+      },
+      "GROUP_SIZE": {
+        "precision": 0.7838,
+        "recall": 0.9355,
+        "f1": 0.8529,
+        "tp": 29,
+        "fp": 8,
+        "fn": 2
+      },
+      "macro": {
+        "precision": 0.9371,
+        "recall": 0.978,
+        "f1": 0.9561
+      }
+    }
+  },
+  {
+    "epoch": 19,
+    "loss": 41.8936,
+    "val_macro_f1": 0.939,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 0.9737,
+        "f1": 0.9867,
+        "tp": 37,
+        "fp": 0,
+        "fn": 1
+      },
+      "CUISINE": {
+        "precision": 0.9474,
+        "recall": 1.0,
+        "f1": 0.973,
+        "tp": 54,
+        "fp": 3,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 0.95,
+        "recall": 0.8636,
+        "f1": 0.9048,
+        "tp": 19,
+        "fp": 1,
+        "fn": 3
+      },
+      "GROUP_SIZE": {
+        "precision": 0.7941,
+        "recall": 0.871,
+        "f1": 0.8308,
+        "tp": 27,
+        "fp": 7,
+        "fn": 4
+      },
+      "macro": {
+        "precision": 0.9383,
+        "recall": 0.9417,
+        "f1": 0.939
+      }
+    }
+  },
+  {
+    "epoch": 20,
+    "loss": 36.6685,
+    "val_macro_f1": 0.9578,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 0.9744,
+        "recall": 1.0,
+        "f1": 0.987,
+        "tp": 38,
+        "fp": 1,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9818,
+        "recall": 1.0,
+        "f1": 0.9908,
+        "tp": 54,
+        "fp": 1,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 0.9565,
+        "recall": 1.0,
+        "f1": 0.9778,
+        "tp": 22,
+        "fp": 1,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 0.9545,
+        "recall": 0.9545,
+        "f1": 0.9545,
+        "tp": 21,
+        "fp": 1,
+        "fn": 1
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8286,
+        "recall": 0.9355,
+        "f1": 0.8788,
+        "tp": 29,
+        "fp": 6,
+        "fn": 2
+      },
+      "macro": {
+        "precision": 0.9392,
+        "recall": 0.978,
+        "f1": 0.9578
+      }
+    }
+  },
+  {
+    "epoch": 21,
+    "loss": 30.0715,
+    "val_macro_f1": 0.964,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9636,
+        "recall": 0.9815,
+        "f1": 0.9725,
+        "tp": 53,
+        "fp": 2,
+        "fn": 1
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.9545,
+        "f1": 0.9767,
+        "tp": 21,
+        "fp": 0,
+        "fn": 1
+      },
+      "GROUP_SIZE": {
+        "precision": 0.871,
+        "recall": 0.871,
+        "f1": 0.871,
+        "tp": 27,
+        "fp": 4,
+        "fn": 4
+      },
+      "macro": {
+        "precision": 0.9669,
+        "recall": 0.9614,
+        "f1": 0.964
+      }
+    }
+  },
+  {
+    "epoch": 22,
+    "loss": 35.8306,
+    "val_macro_f1": 0.9597,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 0.9744,
+        "recall": 1.0,
+        "f1": 0.987,
+        "tp": 38,
+        "fp": 1,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9818,
+        "recall": 1.0,
+        "f1": 0.9908,
+        "tp": 54,
+        "fp": 1,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.9545,
+        "f1": 0.9767,
+        "tp": 21,
+        "fp": 0,
+        "fn": 1
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8182,
+        "recall": 0.871,
+        "f1": 0.8438,
+        "tp": 27,
+        "fp": 6,
+        "fn": 4
+      },
+      "macro": {
+        "precision": 0.9549,
+        "recall": 0.9651,
+        "f1": 0.9597
+      }
+    }
+  },
+  {
+    "epoch": 23,
+    "loss": 24.0698,
+    "val_macro_f1": 0.9685,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9818,
+        "recall": 1.0,
+        "f1": 0.9908,
+        "tp": 54,
+        "fp": 1,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.9545,
+        "f1": 0.9767,
+        "tp": 21,
+        "fp": 0,
+        "fn": 1
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8485,
+        "recall": 0.9032,
+        "f1": 0.875,
+        "tp": 28,
+        "fp": 5,
+        "fn": 3
+      },
+      "macro": {
+        "precision": 0.9661,
+        "recall": 0.9716,
+        "f1": 0.9685
+      }
+    }
+  },
+  {
+    "epoch": 24,
+    "loss": 38.1003,
+    "val_macro_f1": 0.9623,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 0.9744,
+        "recall": 1.0,
+        "f1": 0.987,
+        "tp": 38,
+        "fp": 1,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9818,
+        "recall": 1.0,
+        "f1": 0.9908,
+        "tp": 54,
+        "fp": 1,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.9545,
+        "f1": 0.9767,
+        "tp": 21,
+        "fp": 0,
+        "fn": 1
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8438,
+        "recall": 0.871,
+        "f1": 0.8571,
+        "tp": 27,
+        "fp": 5,
+        "fn": 4
+      },
+      "macro": {
+        "precision": 0.96,
+        "recall": 0.9651,
+        "f1": 0.9623
+      }
+    }
+  },
+  {
+    "epoch": 25,
+    "loss": 34.2111,
+    "val_macro_f1": 0.9623,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9818,
+        "recall": 1.0,
+        "f1": 0.9908,
+        "tp": 54,
+        "fp": 1,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.9545,
+        "f1": 0.9767,
+        "tp": 21,
+        "fp": 0,
+        "fn": 1
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8182,
+        "recall": 0.871,
+        "f1": 0.8438,
+        "tp": 27,
+        "fp": 6,
+        "fn": 4
+      },
+      "macro": {
+        "precision": 0.96,
+        "recall": 0.9651,
+        "f1": 0.9623
+      }
+    }
+  },
+  {
+    "epoch": 26,
+    "loss": 56.5691,
+    "val_macro_f1": 0.9442,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9815,
+        "recall": 0.9815,
+        "f1": 0.9815,
+        "tp": 53,
+        "fp": 1,
+        "fn": 1
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 0.913,
+        "recall": 0.9545,
+        "f1": 0.9333,
+        "tp": 21,
+        "fp": 2,
+        "fn": 1
+      },
+      "GROUP_SIZE": {
+        "precision": 0.75,
+        "recall": 0.871,
+        "f1": 0.806,
+        "tp": 27,
+        "fp": 9,
+        "fn": 4
+      },
+      "macro": {
+        "precision": 0.9289,
+        "recall": 0.9614,
+        "f1": 0.9442
+      }
+    }
+  },
+  {
+    "epoch": 27,
+    "loss": 46.4105,
+    "val_macro_f1": 0.9537,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9818,
+        "recall": 1.0,
+        "f1": 0.9908,
+        "tp": 54,
+        "fp": 1,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.9091,
+        "f1": 0.9524,
+        "tp": 20,
+        "fp": 0,
+        "fn": 2
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8125,
+        "recall": 0.8387,
+        "f1": 0.8254,
+        "tp": 26,
+        "fp": 6,
+        "fn": 5
+      },
+      "macro": {
+        "precision": 0.9589,
+        "recall": 0.9496,
+        "f1": 0.9537
+      }
+    }
+  },
+  {
+    "epoch": 28,
+    "loss": 31.5644,
+    "val_macro_f1": 0.9565,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9818,
+        "recall": 1.0,
+        "f1": 0.9908,
+        "tp": 54,
+        "fp": 1,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 0.9565,
+        "recall": 1.0,
+        "f1": 0.9778,
+        "tp": 22,
+        "fp": 1,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.9091,
+        "f1": 0.9524,
+        "tp": 20,
+        "fp": 0,
+        "fn": 2
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8235,
+        "recall": 0.9032,
+        "f1": 0.8615,
+        "tp": 28,
+        "fp": 6,
+        "fn": 3
+      },
+      "macro": {
+        "precision": 0.9524,
+        "recall": 0.9625,
+        "f1": 0.9565
+      }
+    }
+  },
+  {
+    "epoch": 29,
+    "loss": 25.0876,
+    "val_macro_f1": 0.9417,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9474,
+        "recall": 1.0,
+        "f1": 0.973,
+        "tp": 54,
+        "fp": 3,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 0.9565,
+        "recall": 1.0,
+        "f1": 0.9778,
+        "tp": 22,
+        "fp": 1,
+        "fn": 0
+      },
+      "GROUP_SIZE": {
+        "precision": 0.7143,
+        "recall": 0.8065,
+        "f1": 0.7576,
+        "tp": 25,
+        "fp": 10,
+        "fn": 6
+      },
+      "macro": {
+        "precision": 0.9236,
+        "recall": 0.9613,
+        "f1": 0.9417
+      }
+    }
+  },
+  {
+    "epoch": 30,
+    "loss": 36.6435,
+    "val_macro_f1": 0.9614,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9643,
+        "recall": 1.0,
+        "f1": 0.9818,
+        "tp": 54,
+        "fp": 2,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8125,
+        "recall": 0.8387,
+        "f1": 0.8254,
+        "tp": 26,
+        "fp": 6,
+        "fn": 5
+      },
+      "macro": {
+        "precision": 0.9554,
+        "recall": 0.9677,
+        "f1": 0.9614
+      }
+    }
+  },
+  {
+    "epoch": 31,
+    "loss": 26.4866,
+    "val_macro_f1": 0.9532,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9643,
+        "recall": 1.0,
+        "f1": 0.9818,
+        "tp": 54,
+        "fp": 2,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.8636,
+        "f1": 0.9268,
+        "tp": 19,
+        "fp": 0,
+        "fn": 3
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8438,
+        "recall": 0.871,
+        "f1": 0.8571,
+        "tp": 27,
+        "fp": 5,
+        "fn": 4
+      },
+      "macro": {
+        "precision": 0.9616,
+        "recall": 0.9469,
+        "f1": 0.9532
+      }
+    }
+  },
+  {
+    "epoch": 32,
+    "loss": 26.5194,
+    "val_macro_f1": 0.9633,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9818,
+        "recall": 1.0,
+        "f1": 0.9908,
+        "tp": 54,
+        "fp": 1,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 0.9545,
+        "recall": 0.9545,
+        "f1": 0.9545,
+        "tp": 21,
+        "fp": 1,
+        "fn": 1
+      },
+      "GROUP_SIZE": {
+        "precision": 0.871,
+        "recall": 0.871,
+        "f1": 0.871,
+        "tp": 27,
+        "fp": 4,
+        "fn": 4
+      },
+      "macro": {
+        "precision": 0.9615,
+        "recall": 0.9651,
+        "f1": 0.9633
+      }
+    }
+  },
+  {
+    "epoch": 33,
+    "loss": 29.0241,
+    "val_macro_f1": 0.9388,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9636,
+        "recall": 0.9815,
+        "f1": 0.9725,
+        "tp": 53,
+        "fp": 2,
+        "fn": 1
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 0.8947,
+        "recall": 0.7727,
+        "f1": 0.8293,
+        "tp": 17,
+        "fp": 2,
+        "fn": 5
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8529,
+        "recall": 0.9355,
+        "f1": 0.8923,
+        "tp": 29,
+        "fp": 5,
+        "fn": 2
+      },
+      "macro": {
+        "precision": 0.9423,
+        "recall": 0.9379,
+        "f1": 0.9388
+      }
+    }
+  },
+  {
+    "epoch": 34,
+    "loss": 34.8106,
+    "val_macro_f1": 0.9422,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9643,
+        "recall": 1.0,
+        "f1": 0.9818,
+        "tp": 54,
+        "fp": 2,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.7727,
+        "f1": 0.8718,
+        "tp": 17,
+        "fp": 0,
+        "fn": 5
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8438,
+        "recall": 0.871,
+        "f1": 0.8571,
+        "tp": 27,
+        "fp": 5,
+        "fn": 4
+      },
+      "macro": {
+        "precision": 0.9616,
+        "recall": 0.9287,
+        "f1": 0.9422
+      }
+    }
+  },
+  {
+    "epoch": 35,
+    "loss": 37.1916,
+    "val_macro_f1": 0.9552,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9818,
+        "recall": 1.0,
+        "f1": 0.9908,
+        "tp": 54,
+        "fp": 1,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 0.9545,
+        "recall": 0.9545,
+        "f1": 0.9545,
+        "tp": 21,
+        "fp": 1,
+        "fn": 1
+      },
+      "GROUP_SIZE": {
+        "precision": 0.7941,
+        "recall": 0.871,
+        "f1": 0.8308,
+        "tp": 27,
+        "fp": 7,
+        "fn": 4
+      },
+      "macro": {
+        "precision": 0.9461,
+        "recall": 0.9651,
+        "f1": 0.9552
+      }
+    }
+  },
+  {
+    "epoch": 36,
+    "loss": 25.2308,
+    "val_macro_f1": 0.9579,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 0.9744,
+        "recall": 1.0,
+        "f1": 0.987,
+        "tp": 38,
+        "fp": 1,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9643,
+        "recall": 1.0,
+        "f1": 0.9818,
+        "tp": 54,
+        "fp": 2,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.9545,
+        "f1": 0.9767,
+        "tp": 21,
+        "fp": 0,
+        "fn": 1
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8182,
+        "recall": 0.871,
+        "f1": 0.8438,
+        "tp": 27,
+        "fp": 6,
+        "fn": 4
+      },
+      "macro": {
+        "precision": 0.9514,
+        "recall": 0.9651,
+        "f1": 0.9579
+      }
+    }
+  },
+  {
+    "epoch": 37,
+    "loss": 15.2477,
+    "val_macro_f1": 0.9537,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9818,
+        "recall": 1.0,
+        "f1": 0.9908,
+        "tp": 54,
+        "fp": 1,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.9091,
+        "f1": 0.9524,
+        "tp": 20,
+        "fp": 0,
+        "fn": 2
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8125,
+        "recall": 0.8387,
+        "f1": 0.8254,
+        "tp": 26,
+        "fp": 6,
+        "fn": 5
+      },
+      "macro": {
+        "precision": 0.9589,
+        "recall": 0.9496,
+        "f1": 0.9537
+      }
+    }
+  },
+  {
+    "epoch": 38,
+    "loss": 30.2732,
+    "val_macro_f1": 0.9501,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 38,
+        "fp": 0,
+        "fn": 0
+      },
+      "CUISINE": {
+        "precision": 0.9643,
+        "recall": 1.0,
+        "f1": 0.9818,
+        "tp": 54,
+        "fp": 2,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 0.9565,
+        "recall": 1.0,
+        "f1": 0.9778,
+        "tp": 22,
+        "fp": 1,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.9091,
+        "f1": 0.9524,
+        "tp": 20,
+        "fp": 0,
+        "fn": 2
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8387,
+        "recall": 0.8387,
+        "f1": 0.8387,
+        "tp": 26,
+        "fp": 5,
+        "fn": 5
+      },
+      "macro": {
+        "precision": 0.9519,
+        "recall": 0.9496,
+        "f1": 0.9501
+      }
+    }
+  },
+  {
+    "epoch": 39,
+    "loss": 30.0783,
+    "val_macro_f1": 0.9349,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 0.9737,
+        "f1": 0.9867,
+        "tp": 37,
+        "fp": 0,
+        "fn": 1
+      },
+      "CUISINE": {
+        "precision": 0.9818,
+        "recall": 1.0,
+        "f1": 0.9908,
+        "tp": 54,
+        "fp": 1,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 1.0,
+        "recall": 0.7727,
+        "f1": 0.8718,
+        "tp": 17,
+        "fp": 0,
+        "fn": 5
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8125,
+        "recall": 0.8387,
+        "f1": 0.8254,
+        "tp": 26,
+        "fp": 6,
+        "fn": 5
+      },
+      "macro": {
+        "precision": 0.9589,
+        "recall": 0.917,
+        "f1": 0.9349
+      }
+    }
+  },
+  {
+    "epoch": 40,
+    "loss": 27.2365,
+    "val_macro_f1": 0.9562,
+    "val_per_label": {
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 0.9737,
+        "f1": 0.9867,
+        "tp": 37,
+        "fp": 0,
+        "fn": 1
+      },
+      "CUISINE": {
+        "precision": 0.9474,
+        "recall": 1.0,
+        "f1": 0.973,
+        "tp": 54,
+        "fp": 3,
+        "fn": 0
+      },
+      "DIET": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 22,
+        "fp": 0,
+        "fn": 0
+      },
+      "BUDGET": {
+        "precision": 0.9565,
+        "recall": 1.0,
+        "f1": 0.9778,
+        "tp": 22,
+        "fp": 1,
+        "fn": 0
+      },
+      "GROUP_SIZE": {
+        "precision": 0.8182,
+        "recall": 0.871,
+        "f1": 0.8438,
+        "tp": 27,
+        "fp": 6,
+        "fn": 4
+      },
+      "macro": {
+        "precision": 0.9444,
+        "recall": 0.9689,
+        "f1": 0.9562
+      }
+    }
+  }
+]
