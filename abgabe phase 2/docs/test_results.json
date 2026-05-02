@@ -1,0 +1,47 @@
+{
+  "LOCATION": {
+    "precision": 0.963,
+    "recall": 1.0,
+    "f1": 0.9811,
+    "tp": 26,
+    "fp": 1,
+    "fn": 0
+  },
+  "CUISINE": {
+    "precision": 0.8776,
+    "recall": 0.9773,
+    "f1": 0.9247,
+    "tp": 43,
+    "fp": 6,
+    "fn": 1
+  },
+  "DIET": {
+    "precision": 0.9444,
+    "recall": 1.0,
+    "f1": 0.9714,
+    "tp": 17,
+    "fp": 1,
+    "fn": 0
+  },
+  "BUDGET": {
+    "precision": 0.7826,
+    "recall": 0.8571,
+    "f1": 0.8182,
+    "tp": 18,
+    "fp": 5,
+    "fn": 3
+  },
+  "GROUP_SIZE": {
+    "precision": 0.64,
+    "recall": 0.8,
+    "f1": 0.7111,
+    "tp": 16,
+    "fp": 9,
+    "fn": 4
+  },
+  "macro": {
+    "precision": 0.8415,
+    "recall": 0.9269,
+    "f1": 0.8813
+  }
+}

@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>VocaDine — Phase 2 Presentation</title>
+<style>
+
+body {
+  margin: 0;
+  background: #c8cfd8;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+@media print {
+  @page { size: 370mm 208mm; margin: 0; }
+  html, body {
+    margin: 0 !important; padding: 0 !important;
+    background: white !important; display: block !important;
+    height: auto !important; overflow: visible !important; width: 100% !important;
+  }
+  body > *:not(#print-wrap) { display: none !important; }
+  #print-wrap { display: block !important; position: static !important; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+}
+
+#design-a {
+  display: flex;
+  width: 1400px; height: 787px;
+  border-radius: 8px;
+  box-shadow: 0 8px 48px rgba(0,0,0,0.32);
+  overflow: hidden;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  color: #1a1a2e;
+  transform-origin: center center;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 232px; min-width: 232px;
+  background: #0D1B2A;
+  display: flex; flex-direction: column;
+  padding: 30px 18px 22px;
+}
+.sidebar-logo {
+  font-size: 0.62rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 3.5px;
+  color: #4FC3F7; margin-bottom: 4px;
+}
+.sidebar-module {
+  font-size: 0.58rem; color: rgba(255,255,255,0.28);
+  letter-spacing: 1px; margin-bottom: 28px; line-height: 1.6;
+}
+.progress-bar { height: 1.5px; background: rgba(255,255,255,0.1); margin-bottom: 22px; }
+.progress-fill { height: 100%; background: #4FC3F7; transition: width 0.3s; }
+.nav-item {
+  display: flex; align-items: flex-start; gap: 11px;
+  padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.72rem; color: rgba(255,255,255,0.38);
+  cursor: pointer; transition: color 0.15s; line-height: 1.35;
+}
+.nav-item:last-child { border-bottom: none; }
+.nav-item.active { color: #4FC3F7; }
+.nav-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(255,255,255,0.15); margin-top: 5px; flex-shrink: 0;
+}
+.nav-item.active .nav-dot { background: #4FC3F7; }
+.sidebar-footer {
+  margin-top: auto; font-size: 0.6rem; color: rgba(255,255,255,0.22);
+  border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;
+  line-height: 1.8;
+}
+
+/* MAIN */
+.main-content {
+  flex: 1; background: #F4F7FB; position: relative;
+  display: flex; flex-direction: column;
+}
+.slide { display: none; flex: 1; padding: 46px 52px 76px; flex-direction: column; overflow: hidden; }
+.slide.active { display: flex; }
+
+/* TYPOGRAPHY */
+h1 {
+  font-size: 2.1rem; font-weight: 700;
+  color: #0D1B2A; letter-spacing: -0.5px; line-height: 1.1; margin: 0 0 6px;
+}
+h2 {
+  font-size: 0.66rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2.5px;
+  color: #1B6CA8; margin: 0 0 24px;
+}
+.slide-label {
+  display: inline-block;
+  font-size: 0.58rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 2px; color: #4FC3F7;
+  background: #0D1B2A; border-radius: 3px;
+  padding: 3px 9px; margin-bottom: 10px;
+}
+
+/* LAYOUT */
+.two-col { display: flex; gap: 40px; flex: 1; min-height: 0; }
+.col { flex: 1; display: flex; flex-direction: column; }
+.col-40 { flex: 0 0 42%; display: flex; flex-direction: column; }
+.col-60 { flex: 1; display: flex; flex-direction: column; }
+
+/* COMPONENTS */
+.highlight-box {
+  border-left: 3px solid #1B6CA8; background: #E8F0FA;
+  padding: 13px 16px; border-radius: 0 5px 5px 0;
+  font-size: 0.84rem; line-height: 1.65; margin-bottom: 16px; color: #1a1a2e;
+}
+.highlight-box.cyan { border-left-color: #4FC3F7; background: #E3F5FD; }
+.highlight-box.warn { border-left-color: #F59E0B; background: #FEF9EC; }
+
+.bullet-list { list-style: none; padding: 0; margin: 0; }
+.bullet-list li {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 0; border-bottom: 1px solid #E2E8F0;
+  font-size: 0.84rem; line-height: 1.45; color: #2d3748;
+}
+.bullet-list li:last-child { border-bottom: none; }
+.arr { color: #1B6CA8; font-weight: 700; flex-shrink: 0; }
+
+.stat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+.stat-grid-2 { grid-template-columns: repeat(2,1fr); }
+.stat-card {
+  border: 1px solid #CBD5E0; border-radius: 6px;
+  padding: 14px 10px; text-align: center; background: #fff;
+}
+.stat-card.accent { border-color: #1B6CA8; background: #EBF4FF; }
+.stat-num { font-size: 2rem; font-weight: 700; color: #1B6CA8; line-height: 1; margin-bottom: 5px; }
+.stat-label { font-size: 0.59rem; text-transform: uppercase; letter-spacing: 1.5px; color: #718096; }
+
+.tag-row { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+.tag {
+  font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.5px; color: #1B6CA8;
+  border: 1.5px solid #1B6CA8; border-radius: 3px; padding: 3px 10px;
+}
+.tag.filled { background: #1B6CA8; color: #fff; }
+
+.table-wrap { overflow: hidden; border-radius: 6px; border: 1px solid #CBD5E0; }
+table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+thead tr { background: #0D1B2A; }
+thead th {
+  padding: 9px 12px; text-align: left;
+  font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1.5px;
+  color: #4FC3F7; font-weight: 700;
+}
+tbody tr { border-bottom: 1px solid #E2E8F0; background: #fff; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr.total { background: #EBF4FF; font-weight: 700; }
+tbody tr.warn-row td:first-child { color: #E53E3E; }
+tbody tr.ok-row td:first-child { color: #38A169; }
+tbody td { padding: 8px 12px; color: #2d3748; }
+
+.code-box {
+  background: #0D1B2A; border-radius: 6px; padding: 14px 16px;
+  font-family: "Courier New", monospace; font-size: 0.74rem;
+  line-height: 1.7; color: #a8c8e8;
+}
+.code-box .kw { color: #4FC3F7; }
+.code-box .val { color: #F6AD55; }
+.code-box .cm { color: rgba(255,255,255,0.3); font-style: italic; }
+.code-lbl {
+  font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,0.25); margin-bottom: 8px;
+}
+
+.numbered-list { list-style: none; padding: 0; margin: 0; }
+.numbered-list li {
+  display: flex; gap: 14px; padding: 10px 0;
+  border-bottom: 1px solid #E2E8F0; font-size: 0.83rem; align-items: flex-start;
+}
+.numbered-list li:last-child { border-bottom: none; }
+.num {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #1B6CA8; color: #fff;
+  font-size: 0.68rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+
+.pipeline {
+  display: flex; align-items: stretch; gap: 0; margin-bottom: 20px; flex-wrap: nowrap;
+}
+.pipe-step {
+  background: #0D1B2A; color: #E2E8F0; border-radius: 5px;
+  padding: 10px 11px; font-size: 0.7rem; text-align: center; line-height: 1.35; flex: 1;
+}
+.pipe-step .step-lbl { font-size: 0.55rem; color: #4FC3F7; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 3px; }
+.pipe-arrow { color: #1B6CA8; font-size: 1rem; padding: 0 4px; align-self: center; flex-shrink: 0; }
+
+/* F1 bars */
+.bar-row { display: flex; align-items: center; gap: 8px; }
+.bar-bg { flex: 1; height: 7px; background: #E2E8F0; border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; background: #1B6CA8; }
+.bar-fill.mid { background: #F59E0B; }
+.bar-val { font-size: 0.72rem; font-weight: 700; color: #1B6CA8; width: 34px; text-align: right; }
+
+/* STATUS badges */
+.ok  { color: #38A169; font-weight: 700; }
+.err { color: #E53E3E; font-weight: 700; }
+.warn-s { color: #D69E2E; font-weight: 700; }
+
+/* FOOTER */
+.footer-bar {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  display: flex; align-items: center; padding: 12px 52px;
+  border-top: 1px solid #E2E8F0; background: #F4F7FB;
+  font-size: 0.64rem; color: #A0AEC0;
+}
+.footer-quote { margin-left: auto; font-style: italic; }
+
+</style>
+</head>
+<body>
+<div id="design-a">
+
+  <div class="sidebar">
+    <div class="sidebar-logo">VocaDine</div>
+    <div class="sidebar-module">DLMAIWNLPVA02<br>NLP &amp; Voice 2 · IU</div>
+    <div class="progress-bar"><div class="progress-fill" id="a-progress" style="width:10%"></div></div>
+    <ul style="list-style:none;padding:0;margin:0;flex:1;">
+      <li class="nav-item active" onclick="goTo(0)"><span class="nav-dot"></span>Overview</li>
+      <li class="nav-item" onclick="goTo(1)"><span class="nav-dot"></span>Architecture &amp; Tech Decisions</li>
+      <li class="nav-item" onclick="goTo(2)"><span class="nav-dot"></span>Scoped Comparison</li>
+      <li class="nav-item" onclick="goTo(3)"><span class="nav-dot"></span>Dialog Management</li>
+      <li class="nav-item" onclick="goTo(4)"><span class="nav-dot"></span>NLU Training</li>
+      <li class="nav-item" onclick="goTo(5)"><span class="nav-dot"></span>Recommendation Engine</li>
+      <li class="nav-item" onclick="goTo(6)"><span class="nav-dot"></span>Evaluation</li>
+      <li class="nav-item" onclick="goTo(7)"><span class="nav-dot"></span>STT &amp; Privacy</li>
+      <li class="nav-item" onclick="goTo(8)"><span class="nav-dot"></span>Error Analysis</li>
+      <li class="nav-item" onclick="goTo(9)"><span class="nav-dot"></span>Before / After &amp; Outlook</li>
+    </ul>
+    <div class="sidebar-footer">Phase 2 · Apr 2026<br>Korbinian Much</div>
+  </div>
+
+  <div class="main-content">
+
+    <!-- SLIDE 1: Overview -->
+    <div class="slide active" data-n="1">
+      <div class="slide-label">Problem Definition</div>
+      <h1>VocaDine Germany</h1>
+      <h2>Voice restaurant assistant for English-speaking tourists</h2>
+      <div class="two-col">
+        <div class="col">
+          <div class="highlight-box">
+            Sarah, 28, arrives in Haigerloch. She speaks no German. She says: <em>"Italian food for two, nothing too fancy"</em> — the assistant asks two follow-ups and reads out the top 3 restaurants. End-to-end: ~7 seconds.
+          </div>
+          <ul class="bullet-list">
+            <li><span class="arr">&#8594;</span><div><strong>Core problem:</strong> Google STT (en-US) fails on small German cities. "Haigerloch" → "Hi girl" → 0 results. Solved via 2058+ city whitelist with phonetic aliases.</div></li>
+            <li><span class="arr">&#8594;</span><div><strong>Dialog:</strong> 10 slots (past bookings, diet, cuisine, datetime, guests + 5 optional) — filled implicitly, up to 5 per utterance</div></li>
+            <li><span class="arr">&#8594;</span><div><strong>Ranking:</strong> TF-IDF preference match + Google rating — not popularity-only (Rafailidis &amp; Manolopoulos, 2019)</div></li>
+            <li><span class="arr">&#8594;</span><div><strong>Voice out:</strong> Microsoft Neural TTS (edge-tts, en-US-JennyNeural) — no API key required</div></li>
+          </ul>
+        </div>
+        <div class="col">
+          <div class="stat-grid" style="grid-template-columns:repeat(2,1fr);">
+            <div class="stat-card accent"><div class="stat-num">600</div><div class="stat-label">Annotated utterances</div></div>
+            <div class="stat-card accent"><div class="stat-num">0.881</div><div class="stat-label">NER Macro-F1</div></div>
+            <div class="stat-card"><div class="stat-num">2058+</div><div class="stat-label">German cities</div></div>
+            <div class="stat-card"><div class="stat-num">90%</div><div class="stat-label">Task completion</div></div>
+          </div>
+          <div class="tag-row">
+            <span class="tag filled">spaCy NER</span>
+            <span class="tag filled">TF-IDF</span>
+            <span class="tag">VADER Sentiment</span>
+            <span class="tag">Google Places API</span>
+            <span class="tag">edge-tts</span>
+          </div>
+          <div style="font-size:0.75rem;color:#718096;line-height:1.6;">
+            Ukpabi et al. (2019): voice assistants are an increasingly primary interface for local discovery in tourism. VocaDine targets a gap that generic assistants leave open — small-city German geography for English speakers.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Architecture & Tech Decisions -->
+    <div class="slide" data-n="2">
+      <div class="slide-label">Design Document · Methodology</div>
+      <h1>Architecture &amp; Technology Decisions</h1>
+      <h2>End-to-end pipeline with justified technology choices</h2>
+      <div class="pre-mermaid" style="margin-bottom:16px;">
+        <div class="mermaid" id="arch-diagram">
+flowchart LR
+    A([Mic / Text]) -->|audio| B[STT\nGoogle Web Speech]
+    B -->|transcript| C[NLU\nspaCy NER\n+ Rule fallback]
+    C -->|slots| D[Dialog\nManager\n10 slots]
+    D -->|high-impact slot| E[Validation\nProbe\nPlaces API]
+    E -->|confirmed| F[Full Fetch\n50 venues\n+ reviews]
+    F -->|JSON| G[Ranking\nTF-IDF\n+ Rating]
+    G -->|top 3| H([TTS\nEdge-TTS\nJenny Neural])
+
+    style A fill:#4FC3F7,color:#0D1B2A,stroke:none
+    style H fill:#4FC3F7,color:#0D1B2A,stroke:none
+    style B fill:#0D1B2A,color:#E2E8F0,stroke:#1B6CA8
+    style C fill:#0D1B2A,color:#E2E8F0,stroke:#1B6CA8
+    style D fill:#0D1B2A,color:#E2E8F0,stroke:#1B6CA8
+    style E fill:#0D1B2A,color:#E2E8F0,stroke:#F59E0B
+    style F fill:#0D1B2A,color:#E2E8F0,stroke:#1B6CA8
+    style G fill:#0D1B2A,color:#E2E8F0,stroke:#1B6CA8
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="col">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Component</th><th>Choice</th><th>Why</th></tr></thead>
+              <tbody>
+                <tr><td><strong>STT</strong></td><td><a href="https://pypi.org/project/SpeechRecognition/" target="_blank" style="color:#4FC3F7;">SpeechRecognition</a> · Google Web Speech</td><td>Free tier, reliable en-US, minimal setup</td></tr>
+                <tr><td><strong>NLU</strong></td><td><a href="https://spacy.io/" target="_blank" style="color:#4FC3F7;">spaCy</a> NER + rules</td><td>Trained model generalises; rules cover closed-domain edge cases</td></tr>
+                <tr><td><strong>TTS</strong></td><td><a href="https://pypi.org/project/edge-tts/" target="_blank" style="color:#4FC3F7;">edge-tts</a> · Neural</td><td>pyttsx3 had Spyder/IPython env incompatibilities; edge-tts: neural quality, no API key</td></tr>
+                <tr><td><strong>Ranking</strong></td><td><a href="https://scikit-learn.org/" target="_blank" style="color:#4FC3F7;">scikit-learn</a> TF-IDF + Rating</td><td>Deterministic, explainable, no extra API cost — limitations acknowledged</td></tr>
+                <tr><td><strong>API</strong></td><td><a href="https://developers.google.com/maps/documentation/places/web-service" target="_blank" style="color:#4FC3F7;">Google Places API</a></td><td>Live data, rich fields (reviews, attributes), free quota sufficient</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col">
+          <div class="code-box">
+            <div class="code-lbl">NLU extraction cascade</div>
+            <span class="kw">1.</span> extract_all_spacy(text) <span class="cm">— NER model, all 5 labels</span><br>
+            <span class="kw">2.</span> GERMAN_CITIES whitelist <span class="cm">— location fallback</span><br>
+            <span class="kw">3.</span> keyword maps <span class="cm">— budget / occasion / datetime</span>
+          </div>
+          <div class="highlight-box cyan" style="margin-top:14px;">
+            <strong>NLU is layered:</strong> the trained spaCy model runs first on every utterance. Only slots it misses are passed to the rule layer. This means unseen phrasings ("I fancy sushi", "plant-based") are handled without a keyword entry.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Scoped Comparison -->
+    <div class="slide" data-n="3">
+      <div class="slide-label">Creativity</div>
+      <h1>Scoped Comparison: VocaDine vs. Alexa</h1>
+      <h2>Comparison bounded to one specific use case — English tourist, small German city</h2>
+      <div class="highlight-box warn" style="margin-bottom:18px;">
+        <strong>Honest framing:</strong> Alexa is significantly stronger in ecosystem breadth, hardware, third-party skills, and multilingual support. This table compares one narrow scenario — finding a restaurant in a small German city as an English-speaking tourist.
+      </div>
+      <div class="two-col">
+        <div class="col">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Feature</th><th>Alexa</th><th>VocaDine</th></tr></thead>
+              <tbody>
+                <tr><td>German city STT</td><td style="color:#E53E3E;">Fails on small cities</td><td style="color:#38A169;">2058+ cities + phonetic aliases</td></tr>
+                <tr><td>0-results handling</td><td style="color:#E53E3E;">Empty list</td><td style="color:#38A169;">Validation probe, slot rollback</td></tr>
+                <tr><td>Dialog flexibility</td><td style="color:#D69E2E;">Skill-dependent</td><td style="color:#38A169;">Implicit 5 slots/utterance</td></tr>
+                <tr><td>Ranking signal</td><td style="color:#D69E2E;">Popularity / sponsored</td><td style="color:#38A169;">TF-IDF match + Google rating</td></tr>
+                <tr><td>Impatience detection</td><td style="color:#E53E3E;">Not available</td><td style="color:#38A169;">VADER sentiment + keywords</td></tr>
+                <tr><td>Ambiguity resolution</td><td style="color:#E53E3E;">First match or error</td><td style="color:#38A169;">Clarification follow-up</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col">
+          <h2 style="margin-bottom:12px;">What Alexa does better</h2>
+          <ul class="bullet-list">
+            <li><span class="arr">&#8594;</span><div>Smart home, music, shopping, calendar — massive third-party skill ecosystem</div></li>
+            <li><span class="arr">&#8594;</span><div>Dedicated hardware (Echo devices), always-on voice activation</div></li>
+            <li><span class="arr">&#8594;</span><div>Multi-language support out of the box</div></li>
+            <li><span class="arr">&#8594;</span><div>Global infrastructure, reliability at scale</div></li>
+          </ul>
+          <div class="highlight-box" style="margin-top:14px;">
+            VocaDine is purpose-built for one gap: English speakers navigating German local geography where generic voice assistants fail silently.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Dialog Management -->
+    <div class="slide" data-n="4">
+      <div class="slide-label">Implementation</div>
+      <h1>Dialog Management</h1>
+      <h2>Implicit slot filling · validation · adaptive pacing</h2>
+      <div class="two-col">
+        <div class="col">
+          <div class="highlight-box cyan" style="margin-bottom:14px;">
+            <strong>Input:</strong> "Italian food in Berlin for two tonight, nothing too fancy"<br>
+            <strong>Extracted:</strong> location=Berlin · cuisine=Italian · group_size=2 · datetime=tonight · budget=moderate<br>
+            <strong>Next question:</strong> "Any dietary restrictions?" (only remaining critical slot)
+          </div>
+          <ul class="numbered-list">
+            <li><span class="num">1</span><div><strong>Implicit filling:</strong> up to 5 slots extracted per utterance — already-filled slots skipped automatically</div></li>
+            <li><span class="num">2</span><div><strong>Validation probe:</strong> after high-impact slot (location, cuisine, diet) → quick Places API call; 0 results → slot rolled back, re-prompted</div></li>
+            <li><span class="num">3</span><div><strong>Impatience detection:</strong> VADER compound &lt; −0.5 OR "stop asking" → all remaining slots = "any", immediate search (Hutto &amp; Gilbert, 2014)</div></li>
+            <li><span class="num">4</span><div><strong>Ambiguity resolution:</strong> ≥2 cuisines in one utterance → "I noticed Italian and Greek — which do you prefer?"</div></li>
+            <li><span class="num">5</span><div><strong>Diet inference:</strong> meat keyword in past_experience without negation → diet="none" inferred, question skipped</div></li>
+          </ul>
+        </div>
+        <div class="col">
+          <h2 style="margin-bottom:12px;">10 Conversation Slots</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Slot</th><th>Type</th><th>Example</th></tr></thead>
+              <tbody>
+                <tr><td>location</td><td><span class="tag filled" style="font-size:0.55rem;padding:2px 7px;">critical</span></td><td>"I'm in Berlin"</td></tr>
+                <tr><td>cuisine</td><td><span class="tag filled" style="font-size:0.55rem;padding:2px 7px;">critical</span></td><td>"Italian"</td></tr>
+                <tr><td>diet</td><td><span class="tag filled" style="font-size:0.55rem;padding:2px 7px;">critical</span></td><td>"vegan" / "none"</td></tr>
+                <tr><td>budget</td><td><span class="tag filled" style="font-size:0.55rem;padding:2px 7px;">critical</span></td><td>"moderate"</td></tr>
+                <tr><td>past_experience</td><td><span class="tag" style="font-size:0.55rem;padding:2px 7px;">open</span></td><td>"loved the pasta place"</td></tr>
+                <tr><td>datetime</td><td><span class="tag" style="font-size:0.55rem;padding:2px 7px;">optional</span></td><td>"tonight"</td></tr>
+                <tr><td>group_size</td><td><span class="tag" style="font-size:0.55rem;padding:2px 7px;">optional</span></td><td>"four"</td></tr>
+                <tr><td>occasion</td><td><span class="tag" style="font-size:0.55rem;padding:2px 7px;">optional</span></td><td>"a date"</td></tr>
+                <tr><td>distance</td><td><span class="tag" style="font-size:0.55rem;padding:2px 7px;">optional</span></td><td>"walking distance"</td></tr>
+                <tr><td>special_features</td><td><span class="tag" style="font-size:0.55rem;padding:2px 7px;">optional</span></td><td>"outdoor seating"</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: NLU Training -->
+    <div class="slide" data-n="5">
+      <div class="slide-label">Training Data · Train NLP Models</div>
+      <h1>NLU: spaCy NER Training</h1>
+      <h2>600 annotated utterances · 5 entity labels · blank English model</h2>
+      <div class="two-col">
+        <div class="col">
+          <h2 style="margin-bottom:12px;">Why a trained model?</h2>
+          <div class="highlight-box" style="margin-bottom:14px;">
+            Rule-based matching achieves perfect scores on utterances it was designed for — but fails silently on unseen phrasings. A trained NER model generalises: "I fancy sushi", "plant-based options", "we're counting pennies" are recognised without a keyword entry.
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Dataset Section</th><th>Count</th></tr></thead>
+              <tbody>
+                <tr><td>Single-label utterances</td><td>290</td></tr>
+                <tr><td>Multi-label combinations (2–4 slots)</td><td>270</td></tr>
+                <tr><td>Adversarial / edge cases</td><td>40</td></tr>
+                <tr class="total"><td>Total · split 70/15/15 (seed=42)</td><td>600</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="margin-top:12px;font-size:0.75rem;color:#718096;line-height:1.6;">
+            Annotation guidelines: <code style="font-size:0.73rem;">data/annotation_guidelines.md</code> — span rules, edge cases per label, ASR noise handling, inter-annotator agreement target κ ≥ 0.85
+          </div>
+        </div>
+        <div class="col">
+          <h2 style="margin-bottom:12px;">Training setup</h2>
+          <ul class="numbered-list" style="margin-bottom:14px;">
+            <li><span class="num">1</span><div><strong>Model:</strong> <code style="font-size:0.8rem;">spacy.blank("en")</code> — no pre-trained vectors, NER pipe only</div></li>
+            <li><span class="num">2</span><div><strong>40 epochs</strong>, dropout=0.35, compounding batch 4→32</div></li>
+            <li><span class="num">3</span><div><strong>Best checkpoint</strong> saved at epoch 23 — val Macro-F1 = 0.9685</div></li>
+            <li><span class="num">4</span><div><strong>Labels:</strong> LOCATION · CUISINE · DIET · BUDGET · GROUP_SIZE</div></li>
+          </ul>
+          <div class="code-box">
+            <div class="code-lbl">train_nlu.py — training loop</div>
+            <span class="kw">for</span> epoch <span class="kw">in</span> range(<span class="val">1</span>, N_EPOCHS+<span class="val">1</span>):<br>
+            &nbsp;&nbsp;random.shuffle(train_examples)<br>
+            &nbsp;&nbsp;<span class="kw">for</span> batch <span class="kw">in</span> minibatch(train_examples, ...):<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;nlp.update(batch, drop=<span class="val">0.35</span>, ...)<br>
+            &nbsp;&nbsp;<span class="kw">if</span> val_f1 &gt;= best_f1: nlp.to_disk(MODEL_PATH)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: Recommendation Engine -->
+    <div class="slide" data-n="6">
+      <div class="slide-label">Recommendation Mechanism</div>
+      <h1>TF-IDF Recommendation Engine</h1>
+      <h2>scikit-learn · feature engineering · honest limitations</h2>
+      <div class="two-col">
+        <div class="col">
+          <div class="code-box" style="margin-bottom:14px;">
+            <div class="code-lbl">scoring formula</div>
+            score = (cosine_sim × <span class="val">0.4</span>) + (rating/<span class="val">5.0</span> × <span class="val">0.6</span>)<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ budget_bonus &nbsp;<span class="cm">(+0.1 if priceRange matches)</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ attribute_bonus <span class="cm">(+0.1 outdoor / groups)</span>
+          </div>
+          <h2 style="margin-bottom:10px;">Feature engineering</h2>
+          <ul class="bullet-list">
+            <li><span class="arr">&#8594;</span><div><strong>Restaurant:</strong> name + types + editorialSummary + top-3 review texts + attribute tokens ("outdoor seating terrace", "good for groups")</div></li>
+            <li><span class="arr">&#8594;</span><div><strong>User:</strong> cuisine + diet + occasion + past_experience free text</div></li>
+            <li><span class="arr">&#8594;</span><div><strong>Why 40/60?</strong> Design decision: Google's crowd-sourced rating is assumed to correlate more reliably with overall quality than sparse keyword overlap on short descriptions</div></li>
+          </ul>
+        </div>
+        <div class="col">
+          <div class="highlight-box warn">
+            <strong>Known limitations:</strong> When Places API returns only generic types (e.g. "restaurant", "food"), TF-IDF degrades — reviews and editorial summary become the primary signal. TF-IDF cannot capture semantic similarity: "sushi" and "Japanese" are unrelated tokens unless co-occurring.
+          </div>
+          <div class="highlight-box" style="margin-top:12px;">
+            <strong>On the "training" claim:</strong> <code style="font-size:0.82rem;">fit_transform()</code> at runtime computes IDF weights from the live result set. This is lightweight on-demand vectoriser fitting — not equivalent to offline model training with a large corpus. The genuine ML training component is the <strong>spaCy NER model</strong> (Slide 5).
+          </div>
+          <div style="margin-top:12px;font-size:0.75rem;color:#718096;line-height:1.6;">
+            Rafailidis &amp; Manolopoulos (2019): targeted ranking mechanisms produce significantly more relevant recommendations than popularity-only. Top 3 results: keeps response concise and actionable.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: Evaluation -->
+    <div class="slide" data-n="7">
+      <div class="slide-label">Evaluation · P / R / F1</div>
+      <h1>Evaluation</h1>
+      <h2>NER test set (90 held-out utterances) · system metrics (end-to-end)</h2>
+      <div class="two-col">
+        <div class="col">
+          <h2 style="margin-bottom:10px;">NER — per-label F1</h2>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
+            <div><div style="font-size:0.72rem;color:#4a5568;margin-bottom:3px;">LOCATION &nbsp;<span style="color:#718096;">P=0.963 · R=1.000</span></div><div class="bar-row"><div class="bar-bg"><div class="bar-fill" style="width:98.1%"></div></div><div class="bar-val">0.981</div></div></div>
+            <div><div style="font-size:0.72rem;color:#4a5568;margin-bottom:3px;">DIET &nbsp;<span style="color:#718096;">P=0.944 · R=1.000</span></div><div class="bar-row"><div class="bar-bg"><div class="bar-fill" style="width:97.1%"></div></div><div class="bar-val">0.971</div></div></div>
+            <div><div style="font-size:0.72rem;color:#4a5568;margin-bottom:3px;">CUISINE &nbsp;<span style="color:#718096;">P=0.878 · R=0.977</span></div><div class="bar-row"><div class="bar-bg"><div class="bar-fill" style="width:92.5%"></div></div><div class="bar-val">0.925</div></div></div>
+            <div><div style="font-size:0.72rem;color:#4a5568;margin-bottom:3px;">BUDGET &nbsp;<span style="color:#718096;">P=0.783 · R=0.857</span></div><div class="bar-row"><div class="bar-bg"><div class="bar-fill mid" style="width:81.8%"></div></div><div class="bar-val" style="color:#D69E2E;">0.818</div></div></div>
+            <div><div style="font-size:0.72rem;color:#4a5568;margin-bottom:3px;">GROUP_SIZE &nbsp;<span style="color:#718096;">P=0.640 · R=0.800</span></div><div class="bar-row"><div class="bar-bg"><div class="bar-fill mid" style="width:71.1%"></div></div><div class="bar-val" style="color:#D69E2E;">0.711</div></div></div>
+            <div style="border-top:2px solid #CBD5E0;padding-top:8px;"><div style="font-size:0.72rem;font-weight:700;color:#1B6CA8;margin-bottom:3px;">MACRO</div><div class="bar-row"><div class="bar-bg"><div class="bar-fill" style="width:88.1%"></div></div><div class="bar-val" style="font-weight:700;">0.881</div></div></div>
+          </div>
+          <div style="font-size:0.72rem;color:#718096;line-height:1.6;">GROUP_SIZE F1=0.711: implicit expressions ("me and my wife") are not annotatable NER spans — rule-based layer covers these. Architectural boundary, not model failure.</div>
+        </div>
+        <div class="col">
+          <h2 style="margin-bottom:10px;">System metrics</h2>
+          <div class="table-wrap" style="margin-bottom:14px;">
+            <table>
+              <thead><tr><th>Metric</th><th>Value</th><th>Scope</th></tr></thead>
+              <tbody>
+                <tr><td>Task Completion</td><td><strong>90%</strong> (18/20)</td><td>Full conversation → top-3</td></tr>
+                <tr><td>Local latency</td><td><strong>~1.8s</strong></td><td>STT result → ranking → TTS start</td></tr>
+                <tr><td>End-to-end latency</td><td><strong>~6–9s</strong></td><td>Mic open → user hears result (incl. 2× Places API)</td></tr>
+                <tr><td>WER short words</td><td>~20%</td><td>"no", "two" — known STT limit</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="highlight-box warn">
+            <strong>Latency note:</strong> The "~7s" scenario on Slide 1 is end-to-end including two Google Places API roundtrips. The 1.8s figure is local processing only. Both are real measurements — they measure different things.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: STT & Privacy -->
+    <div class="slide" data-n="8">
+      <div class="slide-label">Methodology · Data Handling</div>
+      <h1>STT &amp; Privacy</h1>
+      <h2>Phonetic alias system · honest data flow assessment</h2>
+      <div class="two-col">
+        <div class="col">
+          <h2 style="margin-bottom:10px;">Phonetic alias system (core differentiator)</h2>
+          <div class="table-wrap" style="margin-bottom:14px;">
+            <table>
+              <thead><tr><th>Spoken</th><th>STT output</th><th>Alias fix</th></tr></thead>
+              <tbody>
+                <tr><td>Tübingen</td><td style="color:#E53E3E;">"tubing in"</td><td>→ Tübingen</td></tr>
+                <tr><td>Haigerloch</td><td style="color:#E53E3E;">"Hi girl"</td><td>→ Haigerloch</td></tr>
+                <tr><td>Horb am Neckar</td><td style="color:#E53E3E;">"hope America"</td><td>→ Horb am Neckar</td></tr>
+                <tr><td>Döner</td><td style="color:#E53E3E;">"doona"</td><td>→ Döner (cuisine)</td></tr>
+                <tr><td>Bayreuth</td><td style="color:#E53E3E;">"Beirut"</td><td>→ Bayreuth</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="font-size:0.75rem;color:#718096;">Word-boundary regex <code style="font-size:0.73rem;">\b...\b</code> prevents substring false positives ("burg" inside "hamburg").</div>
+        </div>
+        <div class="col">
+          <h2 style="margin-bottom:10px;">Privacy — honest data flow</h2>
+          <div class="table-wrap" style="margin-bottom:12px;">
+            <table>
+              <thead><tr><th>Data</th><th>Destination</th><th>Mitigation</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Audio</strong></td><td>Google Cloud (STT)</td><td>Mic only active during <code style="font-size:0.73rem;">listen()</code></td></tr>
+                <tr><td><strong>Location + preferences</strong></td><td>Google Cloud (Places API)</td><td>Query string only, no user profile stored</td></tr>
+                <tr><td><strong>Session slots</strong></td><td>Local memory</td><td>Not written to disk, lost on exit</td></tr>
+                <tr><td><strong>API key</strong></td><td>.env file</td><td>Excluded from repo via .gitignore</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="highlight-box warn">
+            "No always-on microphone" and "no persistent storage" are the minimum bar for a prototype — not differentiating privacy features. For production: GDPR Art. 13 disclosure required before first use, as audio and location data leave the device.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: Error Analysis -->
+    <div class="slide" data-n="9">
+      <div class="slide-label">Error Analysis</div>
+      <h1>Error Analysis</h1>
+      <h2>13 documented failures · 10 resolved · 3 open or known limits</h2>
+      <div class="table-wrap">
+        <table style="font-size:0.76rem;">
+          <thead><tr><th>#</th><th>Category</th><th>Example</th><th>Root Cause</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr class="ok-row"><td>1</td><td>STT phonetic</td><td>"Tübingen" → "tubing in"</td><td>en-US unfamiliar with small city</td><td><span class="ok">&#10003; Alias</span></td></tr>
+            <tr class="ok-row"><td>2</td><td>STT phonetic</td><td>"Döner" → "doona"</td><td>German food term</td><td><span class="ok">&#10003; Alias</span></td></tr>
+            <tr class="ok-row"><td>3</td><td>Substring FP</td><td>"germany" → cuisine=German</td><td>Missing word boundary</td><td><span class="ok">&#10003; \b-regex</span></td></tr>
+            <tr class="ok-row"><td>4</td><td>Negation missed</td><td>"no restrictions" → diet=None</td><td>Positive keywords only</td><td><span class="ok">&#10003; Pattern added</span></td></tr>
+            <tr class="ok-row"><td>5</td><td>Impatience ignored</td><td>"stop asking" → continued</td><td>No sentiment layer</td><td><span class="ok">&#10003; VADER added</span></td></tr>
+            <tr class="ok-row"><td>6</td><td>Ambiguity silent</td><td>"Italian or Greek?" → Italian</td><td>First-match-wins</td><td><span class="ok">&#10003; Clarification</span></td></tr>
+            <tr class="ok-row"><td>7</td><td>Group size wrong</td><td>"me and my family" → 2</td><td>Pattern too generic</td><td><span class="ok">&#10003; family=4</span></td></tr>
+            <tr class="ok-row"><td>8</td><td>Budget keyword gap</td><td>"average price" → unrecognised</td><td>Missing in map</td><td><span class="ok">&#10003; Extended</span></td></tr>
+            <tr class="ok-row"><td>9</td><td>Diet inference FP</td><td>"loved the meatballs" → diet=none</td><td>Meat without negation</td><td><span class="ok">&#10003; Inference logic</span></td></tr>
+            <tr class="ok-row"><td>10</td><td>0-results silent</td><td>Unknown city → continues</td><td>No retry</td><td><span class="ok">&#10003; Probe + retry</span></td></tr>
+            <tr class="warn-row"><td>11</td><td>Diet inference limit</td><td>"served meat and I don't like meat"</td><td>Clause-separated negation</td><td><span class="warn-s">&#9888; Known limit</span></td></tr>
+            <tr class="warn-row"><td>12</td><td>Venue type wrong</td><td>Shisha bar in results</td><td>No type filtering</td><td><span class="err">&#10005; Phase 3</span></td></tr>
+            <tr class="warn-row"><td>13</td><td>Geographic imprecision</td><td>Berlin-Zehlendorf → Moabit</td><td>City only, no radius</td><td><span class="err">&#10005; Phase 3</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: Before/After & Outlook -->
+    <div class="slide" data-n="10">
+      <div class="slide-label">Summary · Outlook</div>
+      <h1>Before / After &amp; Phase 3 Outlook</h1>
+      <h2>What changed between Phase 1 and Phase 2</h2>
+      <div class="two-col">
+        <div class="col">
+          <div class="table-wrap" style="margin-bottom:14px;">
+            <table>
+              <thead><tr><th>Dimension</th><th>Phase 1</th><th>Phase 2</th></tr></thead>
+              <tbody>
+                <tr><td>NLU</td><td>Rule-based only</td><td>spaCy NER + rule fallback</td></tr>
+                <tr><td>NER Macro-F1</td><td>—</td><td><strong>0.881</strong> (90 held-out)</td></tr>
+                <tr><td>Training data</td><td>None</td><td>600 utterances, 420/90/90</td></tr>
+                <tr><td>TTS</td><td>pyttsx3 (env issues)</td><td>edge-tts · Neural voice</td></tr>
+                <tr><td>Slot filling</td><td>Sequential, 1/utterance</td><td>Implicit, up to 5/utterance</td></tr>
+                <tr><td>Impatience</td><td>Ignored</td><td>VADER detection</td></tr>
+                <tr><td>Errors documented</td><td>~5</td><td>13 · 10 resolved</td></tr>
+                <tr><td>Task completion</td><td>Not measured</td><td>90% (18/20)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col">
+          <h2 style="margin-bottom:12px;">Phase 3 Roadmap</h2>
+          <ul class="numbered-list" style="margin-bottom:14px;">
+            <li><span class="num">1</span><div><strong>Type filtering</strong> — exclude non-restaurant results (shisha bars, clubs) from Places API</div></li>
+            <li><span class="num">2</span><div><strong>Radius search</strong> — configurable km radius around city centre</div></li>
+            <li><span class="num">3</span><div><strong>Multilingual</strong> — German, French, Spanish speaker profiles</div></li>
+            <li><span class="num">4</span><div><strong>Offline fallback</strong> — local model when no internet available</div></li>
+          </ul>
+          <div class="highlight-box warn">
+            <strong>What remains limited:</strong> TF-IDF on sparse type strings degrades without reviews; GROUP_SIZE and BUDGET NER still benefit from rule augmentation; end-to-end latency (~7s) acceptable for prototype, not production-ready; privacy disclosure would need GDPR basis for real deployment.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-bar">
+      <span id="a-counter" style="cursor:pointer;font-weight:600;color:#1B6CA8;" title="Click to print">1 / 10</span>
+      <span class="footer-quote">VocaDine Germany · DLMAIWNLPVA02 · Korbinian Much · 2026</span>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function scaleToViewport() {
+    const el = document.getElementById('design-a');
+    const scale = Math.min(window.innerWidth / 1400, window.innerHeight / 787, 1);
+    el.style.transform = `scale(${scale})`;
+  }
+  scaleToViewport();
+  window.addEventListener('resize', scaleToViewport);
+
+  let current = 0;
+
+  function goTo(index) {
+    const slides   = document.querySelectorAll('#design-a .slide');
+    const navItems = document.querySelectorAll('#design-a .nav-item');
+    const progress = document.getElementById('a-progress');
+    const counter  = document.getElementById('a-counter');
+    slides[current].classList.remove('active');
+    navItems[current].classList.remove('active');
+    current = index;
+    slides[index].classList.add('active');
+    navItems[index].classList.add('active');
+    progress.style.width = ((index + 1) / slides.length * 100) + '%';
+    counter.textContent  = (index + 1) + ' / ' + slides.length;
+  }
+
+  document.getElementById('a-counter').addEventListener('click', () => window.print());
+
+  document.addEventListener('keydown', e => {
+    const total = document.querySelectorAll('#design-a .slide').length;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { if (current < total - 1) goTo(current + 1); }
+    else if (e.key === 'ArrowLeft'  || e.key === 'PageUp')  { if (current > 0) goTo(current - 1); }
+  });
+
+  window.addEventListener('beforeprint', () => {
+    const root    = document.getElementById('design-a');
+    const sidebar = root.querySelector('.sidebar');
+    const footer  = root.querySelector('.footer-bar');
+    const slides  = root.querySelectorAll('.slide');
+    const wrap = document.createElement('div');
+    wrap.id = 'print-wrap';
+    wrap.style.cssText = 'position:fixed;top:0;left:0;z-index:99999;background:white;';
+    slides.forEach((slide, i) => {
+      const page = document.createElement('div');
+      page.style.cssText = [
+        'width:1400px','height:787px','display:flex','overflow:hidden',
+        `page-break-after:${i < slides.length - 1 ? 'always' : 'avoid'}`,
+        `break-after:${i < slides.length - 1 ? 'page' : 'avoid'}`,
+      ].join(';') + ';';
+      const sidebarClone = sidebar.cloneNode(true);
+      sidebarClone.querySelectorAll('.nav-item').forEach((item, j) => {
+        item.classList.toggle('active', j === i);
+        item.style.cursor = 'default';
+      });
+      const fill = sidebarClone.querySelector('.progress-fill');
+      if (fill) fill.style.width = ((i + 1) / slides.length * 100) + '%';
+      const main = document.createElement('div');
+      main.className = 'main-content';
+      main.style.cssText = 'flex:1;background:#F4F7FB;position:relative;display:flex;flex-direction:column;overflow:hidden;';
+      const slideClone = slide.cloneNode(true);
+      slideClone.classList.add('active');
+      slideClone.style.display = 'flex';
+      main.appendChild(slideClone);
+      if (footer) {
+        const footerClone = footer.cloneNode(true);
+        const counter = footerClone.querySelector('#a-counter');
+        if (counter) { counter.textContent = `${i + 1} / ${slides.length}`; counter.style.cursor = 'default'; }
+        main.appendChild(footerClone);
+      }
+      page.appendChild(sidebarClone);
+      page.appendChild(main);
+      wrap.appendChild(page);
+    });
+    document.body.appendChild(wrap);
+    root.style.visibility = 'hidden';
+  });
+
+  window.addEventListener('afterprint', () => {
+    const wrap = document.getElementById('print-wrap');
+    if (wrap) wrap.remove();
+    document.getElementById('design-a').style.visibility = 'visible';
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      background: '#F4F7FB',
+      primaryColor: '#0D1B2A',
+      primaryTextColor: '#E2E8F0',
+      primaryBorderColor: '#1B6CA8',
+      lineColor: '#1B6CA8',
+      edgeLabelBackground: '#F4F7FB',
+      fontSize: '11px',
+      fontFamily: '"Helvetica Neue", Arial, sans-serif'
+    },
+    flowchart: { curve: 'basis', nodeSpacing: 40, rankSpacing: 36 }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+1. Core DefinitionWhat it is: A practical, reflective examination consisting of the development of a "product" (software, design, business plan, etc.) and digital documentation.Platform: Conducted and submitted exclusively via PebblePad.Critical Rule: You must follow the three phases in the exact order specified. Failure to adhere to the sequence results in a failed exam.2. The Three PhasesEach phase requires submission and typically involves waiting for tutor feedback (approx. 7 days) before moving to the next.Phase 1: ConceptionGoal: Define the "What, Why, and How."Output: * Text (max. 0.5 DIN A4 page) explaining the concept, motivation, and methodology.Initial sketches, drafts, or diagrams.Key Questions: What is the aim? What are the pros/cons of the ideas? Which tools/methods were chosen?Phase 2: Development & ReflectionGoal: Implement the project and monitor progress.Output: * Text (max. 0.5 DIN A4 page) explaining the implementation process.Digital designs or intermediate steps (prototypes).Focus: Identifying risks, managing resources (time/tech), and tracking status.Phase 3: FinalizationGoal: Submit the final product and a holistic reflection.Output:2-Page Abstract (PDF): Reflection on goals vs. results, methodology, and personal learning.Final Product: The completed work.Resubmission: You must re-upload the (potentially revised) results from Phase 1 and Phase 2.Optional: ZIP folder with additional resources.3. Evaluation CriteriaCriteriaWeightFocusProblem Solving10%Clear definition and understandable concept.Methodology/Ideas20%Transfer of theory/models to the project.Quality of Implementation40%Quality of the final product and documentation.Creativity/Correctness20%Innovation and meeting the intended objective.Formal Requirements10%Compliance with guidelines and citation standards.4. FormalitiesCitations: Must follow IU myCampus standards.Affidavit: Must be submitted electronically via myCampus.Timeline: Final grading and feedback occur within 6 weeks of the Phase 3 submission.
+
+1. Project Task: Restaurant Booking Assistant
+You must develop a voice assistant that helps users book a restaurant based on personal preferences.
+
+Mandatory Inputs: Past bookings, dietary restrictions (vegan/veg), cuisine preference, time/day, and number of guests.
+
+Scale: Sufficient to handle 10 questions and 10 answers.
+
+Output: An individualized recommendation system (Content-based, Collaborative, or Hybrid filtering).
+
+Optional Features (Pick 1): 
+1. Contextual data (busy times, parking) via Twitter/Facebook APIs.
+2. Open data (menus, reviews) via Google Maps or Yelp.
+3. Sentiment analysis (e.g., via OpenAI Whisper) to adjust tone based on user stress/mood.
+
+2. Technical Submission Requirements (The 3 Phases)
+Phase 1: Conception
+Written Concept: 1 DIN A4 page (PDF) explaining the goals, target audience, and choice of tools/frameworks.
+
+Diagram: At least one architectural diagram (UML or Flowchart) showing component interaction and workflow.
+
+Recommended Tools: Draw.io, StarUML, Visio.
+
+Phase 2: Development & Reflection
+Presentation: A 10-slide PDF explaining the implementation procedure.
+
+Content: Must include visual elements, hyperlinks to frameworks, and performance metrics (Precision, Recall, F1 score).
+
+Implementation Steps: Setup frameworks, collect training data, train NLP models, and perform error analysis.
+
+Phase 3: Finalization
+Abstract: 2-page PDF "Making Of" (Arial 11pt, 1.5 line spacing).
+
+Final Product: PDF containing links to a GitHub repository.
+
+ZIP Folder: Must contain all project files (Skill files, Config, Dialog files) organized in subdirectories:
+
+01-Research-and-Development
+
+diagrams
+
+voice assistant
+
+04-Finished voice assistant (User documentation/script to run the bot).
+
+3. Mandatory Documentation Checklist
+In the final submission, you must include documents for:
+
+[ ] Functional & non-functional requirements.
+
+[ ] Design document with architectural overview.
+
+[ ] Data annotation guidelines (labeling process).
+
+[ ] Dataset description (voice samples, transcripts).
+
+[ ] Evaluation metrics table.
+
+[ ] Codebase access (GitHub link).
+
+4. Evaluation Weighting
+40% Quality of Implementation: Does it provide useful recommendations? How are the performance metrics?
+
+20% Methodology/Ideas: Appropriateness of tools (e.g., Mycroft, Snips, TensorFlow, PyTorch).
+
+20% Creativity/Correctness: Innovation in solving challenges.
+
+10% Problem Solving: Clarity of the problem definition.
+
+10% Formal Requirements: Adherence to file naming and formatting.
+
+Naming Convention: Name-FirstName_MatrNo_Voice Assistants_PX_S
+
+
+
+Conception phase
+Concept
+*
+Enter your text for phase 1 here.
+
+
+Concept multi-line text editor.
+Project Concept: Voice Restaurant Assistant
+Goal and Target Group: This project builds a voice assistant that gives restaurant tips using real-time Google data. Users find a place to eat through conversation. I want to build this app to solve a problem I experienced firsthand: sitting in a hotel room in an unknown city, trying to find a restaurant. This app replaces a manual search with a conversational assistant.
+
+Word count: 68 (Max 200)
+
+Interim submission phase 1
+*
+Upload your file(s) for the conception phase here.
+
+
++ Add...
+
+1
+To be completed by: Any assessor
+Tutor feedback
+
+
+Feedback phase 1
+
+Dear Korbinian,
+
+thank you for submitting the conception phase of your voice assistant project “VocaDine”. Overall, the concept demonstrates a solid starting point and shows that you have already thought about the conversational flow, the technical stack, and the integration of external data sources. At the same time, there are several aspects that should be further strengthened before you proceed to the Development and Reflection Phase.
+
+However, the conceptual ambition of the project could be strengthened further. Restaurant recommendation through voice interaction is a well-established application area, and therefore the novelty of the concept currently remains somewhat limited. In the next phase, I would encourage you to further clarify what distinguishes your assistant from existing solutions such as Google Assistant, Alexa skills, or recommendation systems already embedded in mapping services. For example, this could involve a stronger personalization strategy, more advanced preference modelling, contextual awareness (e.g., travel situations, weather, or group dynamics), or improved conversational reasoning rather than a fixed question sequence.
+
+Concerning creativity and originality, the ten-question profiling approach is clearly described and shows that you have already structured the dialogue logic. Nevertheless, the current design appears relatively deterministic. It would strengthen the project if the assistant were able to adapt its questioning dynamically depending on user responses rather than following a rigid sequence. For instance, some slots could be inferred implicitly, optional questions could be skipped, or follow-up clarification could be triggered when the system detects ambiguous responses. Considering such mechanisms would increase both the sophistication and the realism of the assistant.
+
+With respect to methods, tools, and frameworks, your selected stack is technically coherent. The combination of Google Web Speech via SpeechRecognition for speech-to-text, pyttsx3 for text-to-speech, and the Google Places API for real-time restaurant data is reasonable and technically feasible. The inclusion of a content-based filtering approach implemented with Scikit-Learn to match user preferences with restaurant attributes is also a promising element. In your description, however, the recommendation mechanism remains somewhat high level. For the next phase, you should describe in more detail how the filtering model will be implemented. For example, clarify what features represent restaurants, how user preferences are encoded, how similarity is calculated, and how the ranking of recommendations is generated. Providing a more concrete technical specification will make the methodology clearer.
+
+Another aspect that deserves attention is the justification of the technology choices. At the moment, the document states which libraries are used but not why they were selected over alternatives. For instance, you could briefly justify why pyttsx3 was chosen instead of cloud-based TTS services, or why a classical machine-learning recommendation model was selected rather than a more modern embedding-based or LLM-assisted approach. A short reasoning for these choices would strengthen the methodological rigor of the project.
+
+Regarding feasibility and scope, the proposed system appears realistic for the timeframe of the course. The components you selected are widely available and relatively straightforward to integrate in Python. The ten-slot dialogue model also limits the complexity of the conversation management problem, which is appropriate for a course project. Nevertheless, you should already think about practical constraints that may arise during implementation, such as API rate limits, speech recognition errors, or incomplete restaurant data. Planning how the system handles such cases will improve the robustness of the design.
+
+With regard to your diagram, several aspects could could be improved to increase clarity and completeness. First, some labels remain quite abstract, for example “NLP: Extract Slot Value from transcribed text”. It would be useful to specify what method or library performs this step and whether it is rule-based, pattern-based, or machine-learning-based. Second, the boundaries between modules could be clearer. For instance, dialogue state management, slot extraction, and question generation appear within the same block, but they represent different logical components of a conversational system. Separating these elements more explicitly would improve architectural transparency. In addition, the diagram would benefit from clearer data flow annotations. While arrows indicate the direction of processing, the type of data being passed between components (audio, text, structured slot values, recommendation lists) is not always explicit. Adding short labels to the connections would make the processing pipeline easier to understand. Finally, the recommendation module at the end of the pipeline should show more clearly how the Google Places results and the Scikit-Learn filter interact, since this is a central element of the system’s functionality.
+
+Before moving into the Development and Reflection Phase, I recommend that you revise the concept with the following priorities: strengthen the novelty or distinguishing feature of the assistant, clarify the recommendation algorithm and feature representation, provide clearer justification for the chosen technologies, and refine the architecture diagram to better separate system components and data flows. Addressing these points will make the project concept more robust and technically convincing.
+
+If you have questions while refining the design, feel free to reach out.
+
+Best regards,
+Anne
