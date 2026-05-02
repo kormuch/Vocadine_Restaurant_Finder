@@ -1,9 +1,0 @@
-SpeechRecognition==3.10.4
-nltk>=3.8.0
-edge-tts>=6.1.9
-pygame>=2.5.0
-requests==2.31.0
-scikit-learn==1.4.0
-pyaudio==0.2.14
-python-dotenv==1.0.0
-spacy>=3.7.0
