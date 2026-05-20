@@ -1,7 +1,11 @@
 """
-VocaDine Germany — Portfolio Prototype
+VocaDine Germany — Portfolio Prototype  v0.3
 Usecase: English-speaking tourist in Germany.
 Architecture: STT (English) → Dialog Management → Google Places API → ML Ranking → TTS (English)
+
+Changelog v0.3 (Phase 3):
+  - [#16] Venue type filter: exclude non-restaurant place types from results
+  - [#17] Radius search: apply 3km locationBias when specific city is known
 """
 
 import os
@@ -140,10 +144,52 @@ class STTEngine:
 # ─────────────────────────────────────────────
 # GOOGLE PLACES CLIENT
 # ─────────────────────────────────────────────
+# [#16] Types that qualify a venue as a food/dining establishment.
+# A venue must have at least one of these, or a type ending in '_restaurant',
+# to pass the filter. Excludes shisha bars, nightclubs, and similar venues
+# whose types contain only ["bar", "establishment"] or ["night_club"].
+_FOOD_TYPES = frozenset({
+    "restaurant", "food", "meal_takeaway", "meal_delivery", "cafe", "bakery",
+})
+
+def _is_food_venue(biz: dict) -> bool:
+    """Return True if the venue is a food/dining establishment."""
+    types = set(biz.get("types", []))
+    return bool(
+        types & _FOOD_TYPES
+        or any(t.endswith("_restaurant") for t in types)
+    )
+
+
 class GooglePlacesClient:
     def __init__(self, api_key: str):
         self.api_key = api_key
         self.url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
+        self._geocode_cache: dict[str, tuple[float, float] | None] = {}
+
+    def _geocode_city(self, city: str) -> tuple[float, float] | None:
+        """[#17] Geocode a German city name to (lat, lng) using the Google Geocoding API.
+        Result is cached per session — called at most once per city.
+        Returns None on failure; caller falls back to text-only query."""
+        if city in self._geocode_cache:
+            return self._geocode_cache[city]
+        try:
+            resp = requests.get(
+                "https://maps.googleapis.com/maps/api/geocode/json",
+                params={"address": f"{city}, Germany", "key": self.api_key},
+                timeout=5,
+            )
+            data = resp.json()
+            if data.get("status") == "OK":
+                loc = data["results"][0]["geometry"]["location"]
+                coords = (loc["lat"], loc["lng"])
+                self._geocode_cache[city] = coords
+                _log(f"[GEOCODE] {city} → {coords[0]:.4f}, {coords[1]:.4f}")
+                return coords
+        except Exception as e:
+            _log(f"[GEOCODE ERROR] {city}: {e}")
+        self._geocode_cache[city] = None
+        return None
 
     def _build_query(self, slots: dict) -> str:
         parts = []
@@ -166,7 +212,6 @@ class GooglePlacesClient:
         except: return -1
 
     def full_fetch(self, slots: dict) -> list[dict]:
-            # Wir nutzen die Text Search (New) URL
             new_url = "https://places.googleapis.com/v1/places:searchText"
             headers = {
                 "Content-Type": "application/json",
@@ -175,19 +220,38 @@ class GooglePlacesClient:
             }
             body = {
                 "textQuery": self._build_query(slots),
-                "languageCode": "en"
+                "languageCode": "en",
             }
+            # [#17] Apply 3km radius bias when a specific city is known.
+            # Prevents Berlin-Zehlendorf users from getting Charlottenburg results (6km away).
+            # Falls back to text-only query if geocoding fails.
+            city = slots.get("location")
+            if city and city != "any":
+                coords = self._geocode_city(city)
+                if coords:
+                    body["locationBias"] = {
+                        "circle": {
+                            "center": {"latitude": coords[0], "longitude": coords[1]},
+                            "radius": 3000.0,
+                        }
+                    }
             try:
                 resp = requests.post(new_url, headers=headers, json=body, timeout=10)
                 data = resp.json()
-                # Die "New" API gibt die Ergebnisse im Feld 'places' zurück
+                # Places API (New) returns results under the 'places' key
                 results = data.get("places", [])
-                # Wir mappen die Namen kurz um, damit der Rest vom Skript (biz['name']) funktioniert
+                # Normalise field names so downstream code can use biz['name'] consistently
                 mapped_results = []
                 for p in results:
                     p['name'] = p.get('displayName', {}).get('text', 'Unknown')
                     p['formatted_address'] = p.get('formattedAddress', '')
                     mapped_results.append(p)
+                # [#16] Filter out non-food venues (shisha bars, nightclubs, etc.)
+                before = len(mapped_results)
+                mapped_results = [p for p in mapped_results if _is_food_venue(p)]
+                filtered = before - len(mapped_results)
+                if filtered:
+                    _log(f"[FILTER] Removed {filtered} non-food venue(s) from results.")
                 return mapped_results
             except Exception as e:
                 print(f"[GOOGLE FETCH ERROR] {e}")

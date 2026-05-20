@@ -1,5 +1,19 @@
 # VocaDine — Restaurant Voice Assistant for Tourists in Germany
 
+## Project Context
+
+**Course:** DLMAIWNLPVA02 — NLP and Voice Assistants, IU Internationale Hochschule
+**Student ID:** IU14127772
+**Status:** Phase 2 submitted (Apr 2026), feedback received, Phase 3 open
+**Local path:** `C:/Users/kormu/projekte/Artificial Intelligence/IU modules/NLP and Voice 2/`
+**GitHub:** https://github.com/kormuch/Vocadine_Restaurant_Finder
+**Assessor:** Anne Schwerk
+
+**Next step:** Write 2-page "Making Of" PDF (Arial 11pt, 1.5-spaced) — the main deliverable for Phase 3.
+
+---
+
+
 **Course:** DLMAIWNLPVA02 — NLP and Voice Assistants (IU)
 **Phase:** 2 complete · Phase 3 pending
 **Stack:** Python 3.12 · SpeechRecognition · edge-tts · spaCy · scikit-learn · VADER · Google Places API
@@ -359,55 +373,50 @@ Filename: `Much-Korbinian_[MatrNr]_Voice Assistants_P2_S.pdf`
 
 ---
 
-## Phase 3 — Finalization (open)
+## Phase 3
 
-### Submission Requirements
+→ Issue matrix, Anne's feedback analysis, code audit, and full Phase 3 checklist:
+**`abgabe phase 3/todo.md`**
 
-- [ ] 2-page "Making Of" Abstract (Arial 11pt, 1.5-fach) as PDF
-- [ ] Final Product PDF with GitHub link
-- [ ] ZIP folder with required structure:
-  ```
-  01-Research-and-Development/
-  diagrams/
-  voice assistant/
-  04-Finished voice assistant/   ← User documentation + run script
-  ```
-- [ ] Mandatory docs for ZIP:
-  - [ ] Functional & non-functional requirements document
-  - [ ] Design document (formal, based on README architecture section)
-  - [x] Data annotation guidelines (`data/annotation_guidelines.md`)
-  - [ ] Dataset description (600 utterances, how annotated, split rationale)
-  - [x] Evaluation metrics table (`test_results.json`)
-  - [x] GitHub link
-- [ ] Re-upload Phase 1 and Phase 2 results
-- [ ] Eidesstattliche Erklärung via myCampus
+---
 
-### Code Roadmap (Phase 3)
+## Anne Schwerk — Phase 2 Feedback Summary
 
-| Priority | Feature | Problem it solves | Error # |
+Date: May 2026
+
+Cross-referenced against the actual submitted PDF.
+
+| # | Anne's Issue | Present in PDF? | Open for Phase 3 |
 |---|---|---|---|
-| High | Venue type filter | Shisha bars, nightclubs excluded from results | #16 |
-| High | Radius search (3km) | Berlin-Zehlendorf user gets Moabit results (30min away) | #17 |
-| Medium | German food term aliases | "Schnitzel" → "snit cell" unmatched | #22 |
-| Medium | Low-confidence re-prompt | Mumbled input filled as "any" without asking | #23 |
-| Low | Multilingual STT | German/French/Spanish tourists | — |
-| Low | Offline fallback | Local model for no-internet scenarios | — |
+| 1 | 40/60 weighting unjustified — empirical or arbitrary? | Partial: "design decision: rating correlates more reliably" | ✅ Yes — needs direct answer: "not empirically calibrated, because..." |
+| 2 | pyttsx3 switch never explained | Yes, Slide 2 table: "Spyder/IPython env incompatibilities" | ⚠️ Present but too brief — expand in Making Of |
+| 3 | TF-IDF "training" claim intellectually weak | Yes, Slide 6: "lightweight on-demand vectoriser fitting — not equivalent to offline model training" | ⚠️ Qualification present, but Slide 5 header still reads "TRAIN NLP MODELS" |
+| 4 | F1=1.000 still as headline | Not in PDF — Slides 1 and 7 show 0.881 as headline | ✅ Already fixed — Anne likely referenced a draft version |
+| 5 | Latency discrepancy (1.8s vs. 8s) | Yes, Slide 7: local 1.8s and E2E 6–9s explicitly noted. Slide 1 says ~7s (not 8s) | ✅ Already fixed |
+| 6 | Privacy discussion superficial | Yes, Slide 8: "minimum bar for a prototype — not differentiating privacy features. GDPR Art. 13..." | ✅ Already fixed |
+| 7 | Literature decorative | Grice citation not visible in PDF — possibly removed | ⚠️ Making Of: anchor every citation to a concrete design decision |
+
+### What still needs to be addressed in Phase 3
+
+**Issue 1 — Answer the 40/60 question directly:**
+> Current: "design decision: rating correlates more reliably"
+> Required: explicit statement whether the split is empirically motivated or not.
+> Making Of wording: "The 40/60 weighting is not empirically calibrated. It is a design judgment: Google's aggregate rating (thousands of reviews) provides a more stable quality signal than cosine similarity on short type strings. A 50/50 split was considered and rejected because TF-IDF confidence degrades on sparse features."
+
+**Issue 2 — Expand pyttsx3 decision in Making Of:**
+> Slide 2 covers it in one line. Making Of: one paragraph on the switch — what broke (COM Exception in Spyder/IPython), what edge-tts provides (Azure Neural voice, no API key, no environment issues), what was given up (internet dependency).
+
+**Issue 3 — Clarify "Train NLP Models" framing:**
+> The real trained model is spaCy NER (600 utterances, 40 epochs, Macro-F1 = 0.881). TF-IDF fit_transform() at runtime is on-demand vectorization, not model training. Both statements are in the PDF but the Slide 5 header "TRAIN NLP MODELS" (a course requirement label) may cause confusion. Making Of must separate the two explicitly.
+
+**Additional slide notes from Anne:**
+- Slide 1: Remove "0 Typing Required" — trivial for any voice assistant
+- Slide 3: Frame Alexa comparison more explicitly as scoped (already in PDF, reinforce)
+- Slide 10 Phase 3 roadmap: correct priorities — Type Filtering and Radius Search
 
 ---
 
 ## Literature
 
-[1] Grice, H. P. (1975). Logic and conversation. In P. Cole & J. Morgan (Eds.), *Syntax and Semantics, Vol. 3: Speech Acts* (pp. 41–58). Academic Press.
-→ Top-3 design decision (Maxim of Quantity)
-
-[2] Hutto, C. J., & Gilbert, E. (2014). VADER: A parsimonious rule-based model for sentiment analysis of social media text. *Proceedings of ICWSM*. AAAI Press.
-→ ImpatienceDetector implementation
-
-[3] Rafailidis, D., & Manolopoulos, Y. (2019). Can virtual assistants produce recommendations? *Proceedings of WIMS*.
-→ TF-IDF ranking vs. popularity-only
-
-[4] Ukpabi, D. C., Aslam, B., & Karjaluoto, H. (2019). Chatbot adoption in tourism services. In *Robots, AI, and Service Automation in Travel, Tourism and Hospitality*. Emerald.
-→ Relevance of voice assistants in tourism
-
-[5] Abdullah, T., & Ahmet, A. (2022). Deep learning in sentiment analysis: Recent architectures. *ACM Computing Surveys, 55*(8), 1–37.
-→ Justification for VADER in real-time context
+→ Full citations, design decision mappings, and Making Of reference guide:
+**`abgabe phase 3/literature.md`**
