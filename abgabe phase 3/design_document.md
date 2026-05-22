@@ -1,4 +1,5 @@
 # Design Document — VocaDine
+
 **Much, Korbinian | IU14127772 | DLMAIWNLPVA02**
 
 ---
@@ -41,11 +42,11 @@ User
 
 Captures microphone input and converts speech to text using the Google Web Speech API (`speech_recognition` library, `en-US` language).
 
-| Parameter | Value | Rationale |
-|---|---|---|
-| `pause_threshold` | 1.5s | Reduced from default 2.5s to minimise perceived lag |
-| `phrase_time_limit` | 15s | Prevents indefinite recording |
-| `timeout` | 7s | Returns `None` on silence; dialog re-prompts |
+| Parameter           | Value | Rationale                                           |
+| ------------------- | ----- | --------------------------------------------------- |
+| `pause_threshold`   | 1.5s  | Reduced from default 2.5s to minimise perceived lag |
+| `phrase_time_limit` | 15s   | Prevents indefinite recording                       |
+| `timeout`           | 7s    | Returns `None` on silence; dialog re-prompts        |
 
 **Known limitation:** The Web Speech API does not expose confidence scores. Low-confidence results cannot be detected and re-prompted automatically.
 
@@ -65,18 +66,21 @@ A dictionary mapping 2058+ German city names to lists of phonetic alias strings 
 Two-pass slot extraction:
 
 **Pass 1 — spaCy NER model** (`extract_all_spacy()`):
+
 - Blank spaCy English model trained on 600 annotated utterances
 - Labels: LOCATION, CUISINE, DIET, BUDGET, GROUP_SIZE
 - Macro-F1 = 0.881 on 90 held-out test utterances
 - Model loaded once at startup from `models/vocadine_nlu/`
 
 **Pass 2 — Rule-based fallback** (`_extract_multiple_slots()`):
+
 - Keyword maps for cuisine (20+ types), budget (20+ phrases), occasion (10+), datetime, distance
 - Regex patterns for group size (word numbers, relationship phrases, digits)
 - Negation handling for diet slot
-- Covers slots outside the 5 trained NER labels (occasion, datetime, distance, special_features)
+- Covers slots outside the 5 trained NER labels (occasion, datetime, distance)
 
 Additional NLU features:
+
 - `_detect_ambiguity()`: triggers clarification when ≥2 cuisines appear in one utterance
 - `_infer_diet_from_past_experience()`: infers diet=none from meat keywords without negation
 - `ImpatienceDetector`: VADER sentiment (compound < −0.5) or stop keywords → skip remaining slots
@@ -87,18 +91,18 @@ Additional NLU features:
 
 Manages the 10-slot conversation state using `run_interview()`.
 
-| Slot | Type | Filled by |
-|---|---|---|
-| location | critical | NER / whitelist |
-| cuisine | critical | NER / rules |
-| diet | critical | NER / rules / inference |
-| budget | critical | NER / rules |
-| past_experience | open | Free text |
-| datetime | optional | Rules |
-| group_size | optional | NER / rules |
-| occasion | optional | Rules |
-| distance | optional | Rules |
-| special_features | optional | Rules |
+| Slot             | Type     | Filled by               |
+| ---------------- | -------- | ----------------------- |
+| location         | critical | NER / whitelist         |
+| cuisine          | critical | NER / rules             |
+| diet             | critical | NER / rules / inference |
+| budget           | critical | NER / rules             |
+| past_experience  | open     | Free text               |
+| datetime         | optional | Rules                   |
+| group_size       | optional | NER / rules             |
+| occasion         | optional | Rules                   |
+| distance         | optional | Rules                   |
+| special_features | optional | Rules                   |
 
 Questions are asked in semantically related pairs (diet+budget, group_size+occasion, datetime+distance) to reduce turn count. Slots filled by earlier utterances are skipped automatically.
 
@@ -121,9 +125,11 @@ Two API call types:
 ### 3.6 RecommendationEngine (`main.py`)
 
 `build_features(venue)` constructs a feature string per venue:
+
 ```
 name + types + editorialSummary + reviews[:3] + attribute tokens
 ```
+
 Attribute tokens: "outdoor seating terrace" if `outdoorSeating=True`, "good for groups large party" if `goodForGroups=True`.
 
 User preference string: `cuisine + diet + occasion + past_experience`
@@ -131,9 +137,11 @@ User preference string: `cuisine + diet + occasion + past_experience`
 `rank()` runs `TfidfVectorizer.fit_transform()` on all feature strings and the user string at query time (on-demand — no saved model). Cosine similarity computed between user vector and each venue vector.
 
 Scoring formula:
+
 ```
 score = (cosine × 0.4) + (rating/5.0 × 0.6) + budget_bonus + attribute_bonus
 ```
+
 - `budget_bonus`: +0.1 if `priceRange.endPrice` matches budget slot
 - `attribute_bonus`: +0.1 for outdoor seating match, +0.1 for goodForGroups when group ≥ 4
 
@@ -151,14 +159,14 @@ Selected over `pyttsx3` due to: COM Exception in Spyder/IPython environment; unr
 
 ## 4. Data Flow Summary
 
-| Data | From | To | Stored |
-|---|---|---|---|
-| Audio (PCM) | Microphone | Google Cloud (STT) | No |
-| Transcript | Google Cloud | NLU layer | Session memory |
-| Slot values | NLU | DialogStateManager | Session memory |
-| Text query + location | DialogStateManager | Google Cloud (Places API) | No |
-| Venue JSON | Google Places API | RecommendationEngine | Session memory |
-| TTS audio | edge-tts (Azure) | Speaker | Temp file, deleted after playback |
+| Data                  | From               | To                        | Stored                            |
+| --------------------- | ------------------ | ------------------------- | --------------------------------- |
+| Audio (PCM)           | Microphone         | Google Cloud (STT)        | No                                |
+| Transcript            | Google Cloud       | NLU layer                 | Session memory                    |
+| Slot values           | NLU                | DialogStateManager        | Session memory                    |
+| Text query + location | DialogStateManager | Google Cloud (Places API) | No                                |
+| Venue JSON            | Google Places API  | RecommendationEngine      | Session memory                    |
+| TTS audio             | edge-tts (Azure)   | Speaker                   | Temp file, deleted after playback |
 
 No data is written to disk persistently. All session state is lost on program exit.
 
@@ -166,17 +174,17 @@ No data is written to disk persistently. All session state is lost on program ex
 
 ## 5. Technology Stack
 
-| Component | Library / Service | Version |
-|---|---|---|
-| STT | `speech_recognition` + Google Web Speech API | 3.10+ |
-| NLU (trained) | `spaCy` blank en model | 3.x |
-| NLU (sentiment) | `vaderSentiment` | 3.3.2 |
-| Ranking | `scikit-learn` TfidfVectorizer | 1.x |
-| Places API | Google Places API (New) | v1 |
-| Geocoding | Google Geocoding API | v1 |
-| TTS | `edge-tts` | 6.x |
-| Audio playback | `pygame.mixer` | 2.x |
-| Language | Python | 3.12 |
+| Component       | Library / Service                            | Version |
+| --------------- | -------------------------------------------- | ------- |
+| STT             | `speech_recognition` + Google Web Speech API | 3.10+   |
+| NLU (trained)   | `spaCy` blank en model                       | 3.x     |
+| NLU (sentiment) | `vaderSentiment`                             | 3.3.2   |
+| Ranking         | `scikit-learn` TfidfVectorizer               | 1.x     |
+| Places API      | Google Places API (New)                      | v1      |
+| Geocoding       | Google Geocoding API                         | v1      |
+| TTS             | `edge-tts`                                   | 6.x     |
+| Audio playback  | `pygame.mixer`                               | 2.x     |
+| Language        | Python                                       | 3.12    |
 
 ---
 

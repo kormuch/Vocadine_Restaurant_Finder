@@ -3,71 +3,59 @@
 
 ---
 
-## Context and USP
+## 1. Context and USP
 
-VocaDine is a voice-based restaurant finder designed for English-speaking tourists in Germany, requiring no typing and no local knowledge. Its specific problem: an English-speaking tourist names a German city to an en-US speech recognition engine, which the engine does not understand — a failure generic voice assistants do not recover from (Takeda et al., 2014; Datta et al., 2024).
-
----
-
-## Design Philosophy
-
-- **Simplicity by design.** Every technology choice prioritizes maintainability and clarity over sophistication.
-- **Speed by design.** The user wants a fast recommendation; every dialog decision exists to minimize time between opening the app and hearing a result.
-- **Prototype scope is real scope.** Complexity is added only when evidence supports it — without real user data, a more sophisticated ranking algorithm would be false precision.
-- **Security by design.** Closed-domain slot filling structurally prevents prompt injection: input that matches no slot pattern returns no values and is ignored.
+VocaDine is a voice-based restaurant finder for English-speaking tourists in Germany, requiring no typing or local knowledge. It addresses a specific cross-lingual failure: en-US speech recognition engines cannot interpret German city names spoken by tourists — a breakdown generic assistants fail to recover from. While production systems might leverage non-deterministic Large Language Models (LLMs) for proper noun mutations (Kumar et al., 2024), VocaDine deliberately rejects LLMs. For a focused product scope, a deterministic phonetic alias whitelist maximizes task speed and execution reliability, eliminating generative hallucinations and dependency on additional inference infrastructure.
 
 ---
 
-## Technology Decisions
+## 2. Design Philosophy
 
-### TTS: pyttsx3 → edge-tts
-
-Development started with pyttsx3, a known quantity from a prior project. Two problems emerged during testing in Spyder/IPython on Windows: (1) COM Exception — pyttsx3's dependency on Windows SAPI via COM caused crashes on startup and failed to release context cleanly between test runs; (2) short utterance failure — responses like "yes" or "no" were frequently dropped or garbled. edge-tts was selected as the replacement: no COM dependency, reliable on short outputs, no environment-specific setup, and higher output quality via Azure Neural voices. The switch followed from observed testing failures, not a planned architectural decision.
-
-### NLU: spaCy NER and TF-IDF
-
-These two components serve different roles and should not be described as equivalent.
-
-**spaCy NER is the trained model.** A blank spaCy English model was trained on 600 manually annotated utterances across five labels: LOCATION, CUISINE, DIET, BUDGET, GROUP_SIZE. Training used a 420/90/90 train/val/test split (seed=42), 40 epochs, dropout=0.35. The best checkpoint was selected by peak validation F1 (0.97 at epoch 23 — the checkpoint-selection signal, optimistic by design). Evaluation on the fully held-out test set yields Macro-F1 = 0.881. Training scope was deliberately limited under an 80/20 prioritisation: robust coverage of edge cases — regional language variation, domain-specific restaurant vocabulary — would require expert annotation at significantly larger scale. Edge cases fall through to the rule-based fallback.
-
-**TF-IDF is on-demand vectorization.** `TfidfVectorizer.fit_transform()` runs at query time across the current result set. There is no saved TF-IDF model; the vocabulary changes with every query.
-
-### Recommendation Engine: the 40/60 weighting
-
-`score = (cosine × 0.4) + (rating/5.0 × 0.6) + bonuses`
-
-The 60% weight on Google's aggregate rating is a design judgment, not an empirically calibrated parameter. Three reasons: first, the tourist assumption — the user does not know the local restaurant landscape; weighting rating higher means the system acts on information the user lacks, in their interest (Rafailidis & Manolopoulos, 2019). Second, the top-3 design — a cuisine match is not eliminated, only reordered; a lower-rated exact match still appears, just not at position one. Third, feature sparsity — when the Places API returns only generic type data such as `["restaurant", "food"]`, TF-IDF cosine produces near-zero scores across all venues; aggregate rating is the more stable signal in this case (Khadka, 2023; Li et al., 2021). When `editorialSummary` and `reviews` are available in `build_features()`, cosine becomes a stronger contributor. The weighting was not tuned empirically — tuning requires user session data that does not exist at prototype stage.
-
-### Dialog Design
-
-Questions are asked in semantically related pairs — diet and budget together, group size and occasion together, time and distance together — reducing turn count without reducing information gathered. Implicit slot filling allows the user to volunteer multiple slots in one utterance, reducing a 10-slot interview to 2–3 turns in practice. The top-3 output limit follows Grice's Maxim of Quantity (1975). When VADER sentiment scoring detects frustration (compound < −0.5) or explicit stop keywords are used, remaining slots are set to "any" and the system proceeds to search immediately (Hutto & Gilbert, 2014). End-to-end latency is 6–9 seconds including two Places API calls; local processing from STT result to TTS start is approximately 1.8 seconds.
-
-### Phonetic Alias System
-
-The whitelist maps 2058+ German cities to their phonetically likely en-US STT transcriptions, created from observed STT failures and extended with LLM-assisted generation. Word-boundary regex prevents substring false positives — documented cases such as "germany" triggering cuisine=German and "hamburg" triggering city=Burg were resolved this way. A production system would use IPA-based phonetic generation; the curated whitelist is the prototype-appropriate solution (Datta et al., 2024).
+- **Simplicity:** Technology choices prioritize maintainability and code clarity over unnecessary sophistication.
+- **Speed:** Minimal time-to-value; every dialog decision exists to accelerate the path from launching to recommendation.
+- **Pragmatism:** Complexity is rejected without user data. A more advanced ranking algorithm would offer false precision.
+- **Security:** Closed-domain slot filling structurally thwarts prompt injection threats (Greshake et al., 2023); inputs matching no slot pattern are dropped.
 
 ---
 
-## Limitations and Privacy
+## 3. Technology Decisions, Privacy and Limitations
 
-Audio is sent to Google Cloud via the Web Speech API; location and preferences are transmitted to the Google Places API. No data is stored persistently. Google's infrastructure was chosen for reliability and real-world deployability — the consequence, user audio leaving the device, is acknowledged. For production deployment, GDPR Article 13 obligations would apply. Google Places API free-tier rate limits apply; if exceeded, the system returns "no results found" — production use would require exponential backoff. Identified future improvements: session memory for repeating prior recommendations, IPA-based alias generation, and low-confidence STT re-prompting (currently blocked by Web Speech API not exposing confidence scores).
+**TTS:** Testing on Windows revealed flaws in pyttsx3: COM exceptions crashed startup and failed to release context, while short utterances ("yes"/"no") were clipped. Replacing it with edge-tts solved these via Azure Neural voices without environment-specific COM dependencies.
+
+**NLU (spaCy & TF-IDF):** A blank spaCy pipeline was selected (Montani et al., 2023) and trained on 600 annotated utterances across five labels (LOCATION, CUISINE, DIET, BUDGET, GROUP_SIZE) using a 420/90/90 split, 40 epochs, and dropout=0.35. Peak validation F1 reached 0.97 (epoch 23), yielding a held-out test Macro-F1 of 0.881. To absorb unannotated edge cases, a hybrid architecture routes neural extraction failures to a rule-based fallback (Weld et al., 2022). LLMs represent architectural overshooting here; a fast, finite slot-state machine is safer, faster, and immune to prompt exploits. Lexical mapping relies on TF-IDF vectorization (Salton & Buckley, 1988); general sentence embeddings trained on broad corpora are not expected to reliably distinguish context-specific cuisine strings, whereas TF-IDF ensures explicit, interpretable token mapping.
+
+**Privacy & Limits:** Audio and query data leave the device — explicitly acknowledged by design. In a production deployment, GDPR Article 13 would require active user notification before first use; no such interface mechanism exists in this functional prototype. Over-quota API limits default safely to "no results found".
+
+---
+
+## 4. Recommendation Engine
+
+**The 40/60 Weighting:** `score = (cosine × 0.4) + (rating/5.0 × 0.6) + bonus`
+
+The 60% weight on Google ratings is an intentional engineering judgment: (1) The tourist assumption: users lack local context; prioritizing aggregate rating acts in their interest using data they do not possess. (2) Non-exclusion: lower-rated exact cuisine matches are reordered, not eliminated. (3) Feature sparsity: when the API returns generic types (["restaurant", "food"]), cosine scores collapse to near-zero; rating provides the stable signal. When editorialSummary or reviews are retrieved, the cosine term operates on richer feature strings and contributes more meaningfully to the score through increased input quality rather than adjusted weights.
+
+**Dialog Design:** Questions are grouped in semantically related pairs (e.g., diet & budget) to minimize conversational turns. Implicit slot filling captures up to 8 slots per utterance (five via the spaCy NER model and three additional slots (occasion, datetime, distance) via the rule-based pass), reducing a 10-slot interview to 2–3 turns in cooperative scenarios. Output is limited to three results, providing sufficient choice without exceeding what a voice interface can usefully convey — consistent with Grice's Maxim of Quantity (1975). Real-time frustration detection uses VADER sentiment analysis (Hutto & Gilbert, 2014); a compound score threshold of −0.5 was chosen empirically for this dialog context, as VADER's default polarity boundaries are calibrated for social media text rather than spoken interaction. Impatience or explicit abort keywords dynamically intercept the user, abort the questionnaire, and instantly trigger the search. End-to-end latency is 6–9s (two external API roundtrips); local STT-to-TTS processing takes ~1.8s.
+
+---
+
+## 5. Phonetic Alias System
+
+The whitelist maps 2058+ German cities to likely en-US STT corruptions, built from empirical pipeline failures and LLM-assisted generation. To guarantee runtime robustness, LLM candidates were manually cross-verified against a validation list of known speech mutations. Word-boundary regex prevents false positives, restricting aliases strictly to documented cross-lingual edge cases (Kumar et al., 2024).
 
 ---
 
 ## References
 
-Datta, A., et al. (2024). Beyond common words: Enhancing ASR cross-lingual proper noun recognition using large language models. *Findings of EMNLP 2024*. ACL Anthology.
+Greshake, K., Abdelnabi, S., Mishra, S., Endres, C., Holz, T., & Fritz, M. (2023). Not what you've signed up for: Compromising real-world LLM-integrated applications with indirect prompt injection. *Proceedings of the 12th Workshop on Artificial Intelligence Safety (WAISE)*. https://doi.org/10.48550/arXiv.2302.12173
 
-Grice, H. P. (1975). Logic and conversation. In P. Cole & J. Morgan (Eds.), *Syntax and Semantics, Vol. 3* (pp. 41–58). Academic Press.
+Grice, H. P. (1975). Logic and conversation. In P. Cole & J. Morgan (Eds.), *Syntax and Semantics* (Vol. 3, pp. 41–58). Academic Press.
 
-Hutto, C. J., & Gilbert, E. (2014). VADER: A parsimonious rule-based model for sentiment analysis of social media text. *Proceedings of the 8th International Conference on Weblogs and Social Media (ICWSM)*. AAAI Press.
+Hutto, C., & Gilbert, E. (2014). VADER: A parsimonious rule-based model for sentiment analysis of social media text. *Proceedings of the International AAAI Conference on Web and Social Media, 8*(1), 216–225. https://doi.org/10.1609/icwsm.v8i1.14550
 
-Khadka, P. (2023). Content-based recommendation engine for video streaming platform. *arXiv:2308.08406*.
+Kumar, R., Ghosh, S., & Ramakrishnan, G. (2024). Beyond common words: Enhancing ASR cross-lingual proper noun recognition using large language models. *Findings of the Association for Computational Linguistics: EMNLP 2024*, 6821–6828. https://doi.org/10.18653/v1/2024.findings-emnlp.399
 
-Li, Y., et al. (2021). Hybrid algorithm based on content and collaborative filtering in recommendation system optimization. *Scientific Programming*. Wiley.
+Montani, I., Honnibal, M., Boyd, A., Van Landeghem, S., & Peters, H. (2023). *explosion/spaCy: v3.7.2* (v3.7.2) [Software]. Zenodo. https://doi.org/10.5281/zenodo.10009823
 
-Rafailidis, D., & Manolopoulos, Y. (2019). Can virtual assistants produce recommendations? *Proceedings of WIMS*.
+Salton, G., & Buckley, C. (1988). Term-weighting approaches in automatic text retrieval. *Information Processing & Management, 24*(5), 513–523. https://doi.org/10.1016/0306-4573(88)90021-0
 
-Takeda, H., et al. (2014). Improving recognition of proper nouns in end-to-end ASR by phonetic transcription. *Speech Communication, 62*, 1–12. Elsevier.
-
-Weld, H., et al. (2022). A survey of intent classification and slot-filling datasets for task-oriented dialog. *arXiv:2207.13211*.
+Weld, H., Huang, X., Long, S., Poon, J., & Han, S. C. (2022). A survey of joint intent detection and slot filling models in natural language understanding. *ACM Computing Surveys, 55*(8), 1–38. https://doi.org/10.1145/3547138

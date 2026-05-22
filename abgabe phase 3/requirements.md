@@ -14,7 +14,7 @@
 | FR-01 | The system shall accept voice input from the user via microphone | `STTEngine.listen()` — Google Web Speech API, en-US |
 | FR-02 | The system shall extract restaurant preferences from natural language utterances | `NLU._extract_multiple_slots()` — spaCy NER + rule-based fallback |
 | FR-03 | The system shall collect a minimum of 10 preference slots across the conversation | `DialogStateManager.run_interview()` — location, cuisine, diet, budget, group_size, occasion, datetime, distance, past_experience, special_features |
-| FR-04 | The system shall fill multiple slots from a single utterance where possible | Implicit slot filling — up to 5 slots per utterance |
+| FR-04 | The system shall fill multiple slots from a single utterance where possible | Implicit slot filling — up to 8 of the 10 slots per utterance (all except `past_experience` and `special_features`) |
 | FR-05 | The system shall ask only for slots not already filled | Dialog skips questions for slots extracted earlier in the conversation |
 | FR-06 | The system shall validate high-impact slots before accepting them | `GooglePlacesClient.probe()` — 0 results triggers slot rollback and re-prompt |
 | FR-07 | The system shall detect user frustration and skip remaining questions | `ImpatienceDetector` — VADER compound < −0.5 or explicit stop keywords |

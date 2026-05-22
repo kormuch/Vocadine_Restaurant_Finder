@@ -202,13 +202,22 @@ class GooglePlacesClient:
         return " ".join(parts)
 
     def probe(self, slots: dict) -> int:
+        """Lightweight availability check using the same Places API (New) endpoint as full_fetch().
+        Uses minimal FieldMask (places.id only) to minimise quota cost.
+        Returns result count, 0 for ZERO_RESULTS, -1 on error."""
         if not slots.get("location"): return -1
-        params = {"query": self._build_query(slots), "key": self.api_key, "language": "en"}
+        new_url = "https://places.googleapis.com/v1/places:searchText"
+        headers = {
+            "Content-Type": "application/json",
+            "X-Goog-Api-Key": self.api_key,
+            "X-Goog-FieldMask": "places.id",
+        }
+        body = {"textQuery": self._build_query(slots), "languageCode": "en"}
         try:
-            resp = requests.get(self.url, params=params, timeout=5)
+            resp = requests.post(new_url, headers=headers, json=body, timeout=5)
             data = resp.json()
-            if data.get("status") == "ZERO_RESULTS": return 0
-            return len(data.get("results", []))
+            places = data.get("places", [])
+            return len(places)
         except: return -1
 
     def full_fetch(self, slots: dict) -> list[dict]:

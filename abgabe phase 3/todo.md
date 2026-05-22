@@ -178,7 +178,7 @@ User speaks → STT (Google Web Speech, en-US) → raw transcript
 
 ### Feature 5 — Implicit slot filling & bundled questions (run_interview, main.py:769)
 
-**What it does:** Single open question at the start allows user to volunteer multiple slots at once. `_extract_multiple_slots()` fills up to 5 slots from one utterance. Dialog then asks only for remaining unfilled slots. Slots are asked in logical pairs: diet+budget together, group_size+occasion together, datetime+distance together.
+**What it does:** Single open question at the start allows user to volunteer multiple slots at once. `_extract_multiple_slots()` fills up to 8 of the 10 slots from one utterance (location, cuisine, diet, budget, group_size, occasion, datetime, distance — `past_experience` and `special_features` are not filled here). Dialog then asks only for remaining unfilled slots. Slots are asked in logical pairs: diet+budget together, group_size+occasion together, datetime+distance together.
 
 **Example:** "I want Italian for two tonight in Munich, nothing too fancy" → fills cuisine, group_size, datetime, location, budget in one turn. Dialog skips all five slot questions.
 
